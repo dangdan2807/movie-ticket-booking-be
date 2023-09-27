@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using MovieTicketBookingBe.Models;
 using MovieTicketBookingBe.Models.Response;
 using MovieTicketBookingBe.Services;
@@ -15,17 +16,36 @@ namespace MovieTicketBookingBe.Controllers
     {
         private readonly Serilog.ILogger _logger;
         private readonly IUserService _userService;
+        private readonly IAuthenticationSchemeProvider _authenticationSchemeProvider;
 
-        public AuthController(Serilog.ILogger logger, IUserService userService)
+        public AuthController(Serilog.ILogger logger, IUserService userService, IAuthenticationSchemeProvider authenticationSchemeProvider)
         {
             _logger = logger;
             _userService = userService;
+            _authenticationSchemeProvider = authenticationSchemeProvider;
         }
 
         [HttpPost("login")]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
-            return Ok();
+            try
+            {
+                var loginDTO = await _userService.Login(loginViewModel);
+                return Ok(new SuccessResponse
+                (
+                    HttpStatusCode.OK,
+                    "Login successfully",
+                    loginDTO
+                ));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse
+                (
+                    HttpStatusCode.BadRequest,
+                    ex.Message
+                ));
+            }
         }
 
         [HttpPost("register")]
@@ -67,7 +87,6 @@ namespace MovieTicketBookingBe.Controllers
                     Phone = registerVM.phone,
                     Address = registerVM.address + "",
                     Password = registerVM.password,
-
                 });
 
                 return Ok(new SuccessResponse
@@ -83,8 +102,7 @@ namespace MovieTicketBookingBe.Controllers
                 return BadRequest(new ErrorResponse
                 (
                     HttpStatusCode.BadRequest,
-                    ex.Message,
-                    null
+                    ex.Message
                 ));
             }
         }

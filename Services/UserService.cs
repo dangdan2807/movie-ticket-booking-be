@@ -1,16 +1,19 @@
 ﻿using MovieTicketBookingBe.Models;
 using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.Repositories;
+using MovieTicketBookingBe.ViewModels;
 
 namespace MovieTicketBookingBe.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ITokenService _tokenService;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, ITokenService tokenService)
         {
             _userRepository = userRepository;
+            _tokenService = tokenService;
         }
 
         public async Task<UserDTO> CreateUser(User user)
@@ -28,11 +31,11 @@ namespace MovieTicketBookingBe.Services
 
             return new UserDTO
             {
-                Id = newUser.Id,
-                FullName = newUser.FullName,
-                Phone = newUser.Phone,
-                Address = newUser.Address,
-                Status = newUser.Status,
+                id = newUser.Id,
+                fullName = newUser.FullName,
+                phone = newUser.Phone,
+                address = newUser.Address,
+                status = newUser.Status,
             };
         }
 
@@ -49,14 +52,36 @@ namespace MovieTicketBookingBe.Services
             }
             return new UserDTO
             {
-                Id = user.Id,
-                FullName = user.FullName,
-                Address = user.Address,
-                Phone = user.Phone,
-                Status = user.Status,
+                id = user.Id,
+                fullName = user.FullName,
+                address = user.Address,
+                phone = user.Phone,
+                status = user.Status,
                 CreateAt = user.CreateAt,
-                UpdateAt = user.UpdateAt,
-                UpdateBy = user.UpdateBy,
+            };
+        }
+
+        public async Task<LoginDTO> Login(LoginViewModel loginViewModel)
+        {
+            User? user = await _userRepository.GetUserByPhone(loginViewModel.phone);
+            if (user == null)
+            {
+                throw new ArgumentException("Wrong phone or password");
+            }
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginViewModel.password, user.Password);
+            if (!isPasswordValid)
+            {
+                throw new ArgumentException("Wrong phone or password");
+            }
+
+            var accessToken = await _tokenService.GenerateAccessToken(user);
+            var refreshToken = await _tokenService.GenerateRefreshToken(user.Id, accessToken);
+
+            return new LoginDTO
+            {
+                accessToken = accessToken,
+                refreshToken = refreshToken
             };
         }
     }

@@ -18,14 +18,22 @@ namespace MovieTicketBookingBe.Repositories
             {
                 throw new ArgumentNullException("user is null");
             }
+            string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
+            user.Password = hashedPassword;
+
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
         }
 
-        public Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserById(int id)
         {
-            throw new NotImplementedException();
+            if (id == null)
+            {
+                throw new ArgumentNullException("id is null");
+            }
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User> GetUserByPhone(string phone)

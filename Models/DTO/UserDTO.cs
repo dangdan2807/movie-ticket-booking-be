@@ -4,13 +4,13 @@ namespace MovieTicketBookingBe.Models.DTO
 {
     public class UserDTO
     {
-        public int Id { get; set; }
-        public string FullName { get; set; }
-        public string Phone { get; set; }
-        public string Address { get; set; }
-        public bool Status { get; set; } = true;
+        public int id { get; set; }
+        public string fullName { get; set; }
+        public string phone { get; set; }
+        public string address { get; set; }
+        public bool status { get; set; } = true;
         public DateTime? CreateAt { get; set; } = DateTime.Now;
-        public DateTime? UpdateAt { get; set; }
-        public int UpdateBy { get; set; }
+        //public DateTime? UpdateAt { get; set; }
+        //public int UpdateBy { get; set; }
     }
 }

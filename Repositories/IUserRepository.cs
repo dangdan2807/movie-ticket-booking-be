@@ -6,7 +6,7 @@ namespace MovieTicketBookingBe.Repositories
     {
         Task<User> CreateUser(User user);
         Task<User> UpdateUser();
-        Task<User> GetUserByIdAsync(int id);
+        Task<User> GetUserById(int id);
         Task<User> GetUserByPhone(string phone);
     }
 }
