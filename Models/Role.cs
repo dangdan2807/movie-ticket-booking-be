@@ -22,6 +22,10 @@ namespace MovieTicketBookingBe.Models
         [StringLength(100)]
         public string RoleName { get; set; }
 
+        [Column("description")]
+        [StringLength(255)]
+        public string Description { get; set; } = "";
+
         [Required]
         [Column("status")]
         public bool Status { get; set; } = true;
@@ -44,6 +48,7 @@ namespace MovieTicketBookingBe.Models
         [Column("delete_at")]
         public DateTime? DeleteAt { get; set; }
 
+        [NotMapped]
         public ICollection<UserRole> UserRoles { get; set; }
     }
 }

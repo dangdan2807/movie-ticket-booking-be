@@ -11,30 +11,48 @@ namespace MovieTicketBookingBe.Services
     public class TokenService : ITokenService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IConfiguration _config;
+        private readonly Serilog.ILogger _logger;
 
-        public TokenService(IConfiguration config, IUserRepository userRepository) {
+        public TokenService(
+            IConfiguration config, 
+            IUserRepository userRepository, 
+            IRoleRepository roleRepository,
+            Serilog.ILogger logger
+        )
+        {
             _config = config;
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
+            _logger = logger;
         }
 
         public async Task<string> GenerateAccessToken(User user)
         {
+            var roles = await _roleRepository.GetRolesByUserId(user.Id);
+            if (roles.Count == 0)
+            {
+                throw new Exception("User not found");
+            }
+
             // Nếu xác thực thành công thì trả về chuỗi JWT
             var tokenHandler = new JwtSecurityTokenHandler();
             var sercetKey = Encoding.ASCII.GetBytes(_config["Jwt:SercetKey"] ?? "");
-            //var role = user.isAdmin ? "Admin" : "User";
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    //new Claim(ClaimTypes.Role, role),
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(sercetKey),
                                SecurityAlgorithms.HmacSha256Signature)
             };
+            foreach (var role in roles)
+            {
+                tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Role, role.RoleCode));
+            }
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = tokenHandler.WriteToken(token);
 

@@ -45,11 +45,7 @@ namespace MovieTicketBookingBe.Models
         [Column("update_by")]
         public int UpdateBy { get; set; }
 
-        //[ForeignKey("UserRole")]
-        //[Column("user_role_id")]
-        //[Required]
-        //public int? userId { get; set; }
-
+        [NotMapped]
         public ICollection<UserRole> UserRoles { get; set; }
     }
 }

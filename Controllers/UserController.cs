@@ -13,12 +13,5 @@ namespace MovieTicketBookingBe.Controllers
         {
             _logger = logger;
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Login()
-        {
-            _logger.Information("Get all users");
-            return Ok("");
-        }
     }
 }

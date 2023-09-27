@@ -9,11 +9,13 @@ namespace MovieTicketBookingBe.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
+        private readonly IRoleRepository _roleRepository;
 
-        public UserService(IUserRepository userRepository, ITokenService tokenService)
+        public UserService(IUserRepository userRepository, ITokenService tokenService, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
+            _roleRepository = roleRepository;
         }
 
         public async Task<UserDTO> CreateUser(User user)
@@ -22,12 +24,19 @@ namespace MovieTicketBookingBe.Services
             {
                 throw new ArgumentNullException("user is null");
             }
+
             var existingUser = await _userRepository.GetUserByPhone(user.Phone);
             if (existingUser != null)
             {
                 throw new Exception("Phone number already exists");
             }
+
             var newUser = await _userRepository.CreateUser(user);
+            if (newUser != null)
+            {
+                var role = await _roleRepository.GetRoleByCode("MEMBER");
+                await _roleRepository.CreateUserRole(newUser.Id, role.RoleCode);
+            }
 
             return new UserDTO
             {

@@ -16,7 +16,7 @@ namespace MovieTicketBookingBe.Repositories
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user is null");
+                throw new ArgumentNullException("user info is null");
             }
             string salt = BCrypt.Net.BCrypt.GenerateSalt(12);
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);

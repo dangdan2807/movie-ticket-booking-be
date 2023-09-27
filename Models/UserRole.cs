@@ -7,15 +7,15 @@ namespace MovieTicketBookingBe.Models
     public class UserRole
     {
         [Column("user_id")]
+        [ForeignKey("user_id")]
         public int UserId { get; set; }
 
         [Column("role_id")]
+        [ForeignKey("role_id")]
         public int RoleId { get; set; }
 
-        [ForeignKey("user_id")]
         public virtual User? User { get; set; }
 
-        [ForeignKey("role_id")]
         public virtual Role? Role { get; set; }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MovieTicketBookingBe.ViewModels
 {
-    public class CreateRoleVM
+    public class UpdateRoleVM
     {
         [StringLength(100)]
         public string roleName { get; set; }
