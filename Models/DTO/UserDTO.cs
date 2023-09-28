@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Text.Json.Serialization;
 
 namespace MovieTicketBookingBe.Models.DTO
 {
@@ -9,7 +9,10 @@ namespace MovieTicketBookingBe.Models.DTO
         public string phone { get; set; }
         public string address { get; set; }
         public bool status { get; set; } = true;
-        public DateTime? CreateAt { get; set; } = DateTime.Now;
+        public DateTime? createAt { get; set; } = DateTime.Now;
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<RoleDTO>? roles { get; set; } = null;
         //public DateTime? UpdateAt { get; set; }
         //public int UpdateBy { get; set; }
     }

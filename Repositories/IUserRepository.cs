@@ -1,12 +1,15 @@
 ﻿using MovieTicketBookingBe.Models;
+using MovieTicketBookingBe.Models.DTO;
+using MovieTicketBookingBe.ViewModels;
 
 namespace MovieTicketBookingBe.Repositories
 {
     public interface IUserRepository
     {
         Task<User> CreateUser(User user);
-        Task<User> UpdateUser();
         Task<User> GetUserById(int id);
         Task<User> GetUserByPhone(string phone);
+        Task<GetUsersDTO> GetUsers(int currentPage = 1, int pageSize = 10, string sort = "ASC");
+        Task<UserDTO> UpdateUserById(int id, UpdateUserVM updateUserVM);
     }
 }

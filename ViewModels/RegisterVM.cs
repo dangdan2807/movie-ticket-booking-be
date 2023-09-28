@@ -4,19 +4,20 @@ namespace MovieTicketBookingBe.ViewModels
 {
     public class RegisterVM
     {
-        //[Required]
-        //[StringLength(50, MinimumLength = 3, ErrorMessage = "Fullname must be between 3 - 50 characters")]
-        public string? fullname { get; set; }
+        [Required]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Fullname must be between 3 - 50 characters")]
+        public string fullname { get; set; } = "";
 
-        //[Required]
-        //[StringLength(15, MinimumLength = 10, ErrorMessage = "Phone must be 10 - 15 characters")]
-        //[RegularExpression(@"^\+?(\d{10,15})$", ErrorMessage = "Invalid phone number")]
-        public string? phone { get; set; }
+        [Required]
+        [StringLength(12, MinimumLength = 10, ErrorMessage = "Phone must be 10 - 12 characters")]
+        [RegularExpression(@"^\+?(\d{10,12})$", ErrorMessage = "Invalid phone number")]
+        public string phone { get; set; } = "";
 
-        public string? address { get; set; }
+        [StringLength(255, ErrorMessage = "Address maximum 255 characters")]
+        public string address { get; set; } = "";
 
-        //[Required]
-        //[StringLength(255, MinimumLength = 3, ErrorMessage = "Username must be between 3 - 255 characters")]
-        public string? password { get; set; }
+        [Required]
+        [StringLength(255, MinimumLength = 6, ErrorMessage = "Password must be between 6 - 255 characters")]
+        public string password { get; set; } = "";
     }
 }

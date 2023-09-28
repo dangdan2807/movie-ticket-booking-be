@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MovieTicketBookingBe.Middlewares;
 using MovieTicketBookingBe.Models;
 using MovieTicketBookingBe.Repositories;
 using MovieTicketBookingBe.Services;
@@ -119,6 +120,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<CustomErrorResponseMiddleware>();
 
 app.UseHttpsRedirection();
 

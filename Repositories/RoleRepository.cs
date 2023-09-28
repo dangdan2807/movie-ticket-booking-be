@@ -35,7 +35,10 @@ namespace MovieTicketBookingBe.Repositories
             {
                 throw new Exception("Id is invalid");
             }
-            var role = await _context.Roles.FirstOrDefaultAsync(x => x.RoleId == id);
+
+            var role = await _context.Roles
+                .Where(x => x.IsDeleted == false)
+                .FirstOrDefaultAsync(x => x.RoleId == id);
             if (role == null)
             {
                 throw new Exception("Role not found");
@@ -49,7 +52,10 @@ namespace MovieTicketBookingBe.Repositories
             {
                 throw new Exception("code is empty or null");
             }
-            var role = await _context.Roles.FirstOrDefaultAsync(x => x.RoleCode == code);
+
+            var role = await _context.Roles
+                .Where(x => x.IsDeleted == false)
+                .FirstOrDefaultAsync(x => x.RoleCode == code);
             if (role == null)
             {
                 throw new Exception("Role not found");
@@ -115,7 +121,10 @@ namespace MovieTicketBookingBe.Repositories
             {
                 throw new Exception("Role is null");
             }
-            var existingRole = await _context.Roles.Where(b => b.IsDeleted == false).FirstOrDefaultAsync(x => x.RoleId == id);
+
+            var existingRole = await _context.Roles
+                .Where(b => b.IsDeleted == false)
+                .FirstOrDefaultAsync(x => x.RoleId == id);
             if (existingRole == null)
             {
                 throw new Exception("Role not found");

@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace MovieTicketBookingBe.Models.DTO
+﻿namespace MovieTicketBookingBe.Models.DTO
 {
     public class RoleDTO
     {

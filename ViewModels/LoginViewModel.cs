@@ -5,7 +5,7 @@ namespace MovieTicketBookingBe.ViewModels
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Phone is required")]
-        [StringLength(10, MinimumLength = 10, ErrorMessage = "Phone must be 10 characters")]
+        [StringLength(12, MinimumLength = 10, ErrorMessage = "Phone must be 10 - 12 characters")]
         [RegularExpression(@"^0[3|5|7|8|9]\d{8}$", ErrorMessage = "Phone must be numeric")]
         public string phone { get; set; } = "";
 

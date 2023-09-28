@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTicketBookingBe.Models;
-using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.Models.Response;
 using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.ViewModels;
@@ -153,7 +152,6 @@ namespace MovieTicketBookingBe.Controllers
                 {
                     throw new Exception("Role is null");
                 }
-
                 if (id <= 0)
                 {
                     throw new Exception("Id is invalid");

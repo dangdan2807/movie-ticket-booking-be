@@ -6,13 +6,14 @@ namespace MovieTicketBookingBe.Models.Response
     public class ApiResponse
     {
         [JsonProperty("statusCode")]
-        public HttpStatusCode StatusCode { get; set; }
+        public HttpStatusCode statusCode { get; set; }
+
         [JsonProperty("Message")]
-        public string? Message { get; set; }
+        public string? message { get; set; }
 
         public ApiResponse(HttpStatusCode statusCode, string message) {
-            this.StatusCode = statusCode;
-            this.Message = message;
+            this.statusCode = statusCode;
+            this.message = message;
         }
     }
 }

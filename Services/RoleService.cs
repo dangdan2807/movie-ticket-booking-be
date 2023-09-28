@@ -1,8 +1,6 @@
 ﻿using MovieTicketBookingBe.Models;
 using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.Repositories;
-using MovieTicketBookingBe.ViewModels;
-using System.Data;
 
 namespace MovieTicketBookingBe.Services
 {
@@ -28,6 +26,11 @@ namespace MovieTicketBookingBe.Services
             if (user == null)
             {
                 throw new Exception("User not found");
+            }
+            var existingRole = await _roleRepository.GetRoleByCode(role.RoleCode);
+            if (existingRole != null)
+            {
+                throw new Exception("Role code is already exists");
             }
             var newRole = await _roleRepository.CreateRole(userId, role);
             return new RoleDTO

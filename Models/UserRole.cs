@@ -14,8 +14,10 @@ namespace MovieTicketBookingBe.Models
         [ForeignKey("role_id")]
         public int RoleId { get; set; }
 
+        [NotMapped]
         public virtual User? User { get; set; }
 
+        [NotMapped]
         public virtual Role? Role { get; set; }
     }
 }

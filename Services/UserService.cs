@@ -10,12 +10,14 @@ namespace MovieTicketBookingBe.Services
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
         private readonly IRoleRepository _roleRepository;
+        private readonly Serilog.ILogger _logger;
 
-        public UserService(IUserRepository userRepository, ITokenService tokenService, IRoleRepository roleRepository)
+        public UserService(IUserRepository userRepository, ITokenService tokenService, IRoleRepository roleRepository, Serilog.ILogger logger)
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
             _roleRepository = roleRepository;
+            _logger = logger;
         }
 
         public async Task<UserDTO> CreateUser(User user)
@@ -31,7 +33,7 @@ namespace MovieTicketBookingBe.Services
                 throw new Exception("Phone number already exists");
             }
 
-            var newUser = await _userRepository.CreateUser(user);
+            User newUser = await _userRepository.CreateUser(user);
             if (newUser != null)
             {
                 var role = await _roleRepository.GetRoleByCode("MEMBER");
@@ -48,7 +50,44 @@ namespace MovieTicketBookingBe.Services
             };
         }
 
-        public async Task<UserDTO> GetUserByPhone(string phone)
+        public async Task<UserDTO?> GetUserById(int id)
+        {
+            if (id <= 0)
+            {
+                throw new Exception("Id is invalid");
+            }
+
+            var user = await _userRepository.GetUserById(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var roles = await _roleRepository.GetRolesByUserId(user.Id);
+            var rolesDTO = roles.Select(r => new RoleDTO
+            {
+                roleId = r.RoleId,
+                roleCode = r.RoleCode,
+                roleName = r.RoleName,
+                description = r.Description,
+                status = r.Status,
+                createAt = r.CreateAt,
+            }).ToList();
+
+
+            return new UserDTO
+            {
+                id = user.Id,
+                fullName = user.FullName,
+                address = user.Address,
+                phone = user.Phone,
+                status = user.Status,
+                createAt = user.CreateAt,
+                roles = rolesDTO
+            };
+        }
+
+        public async Task<UserDTO?> GetUserByPhone(string phone)
         {
             if (string.IsNullOrEmpty(phone))
             {
@@ -66,8 +105,31 @@ namespace MovieTicketBookingBe.Services
                 address = user.Address,
                 phone = user.Phone,
                 status = user.Status,
-                CreateAt = user.CreateAt,
+                createAt = user.CreateAt,
             };
+        }
+
+        public async Task<GetUsersDTO> GetUsers(int currentPage = 1, int pageSize = 10, string sort = "ASC")
+        {
+            if (currentPage <= 0)
+            {
+                throw new Exception("Current page is invalid");
+            }
+
+            if (pageSize <= 0)
+            {
+                throw new Exception("Page size is invalid");
+            }
+
+            if (string.IsNullOrEmpty(sort))
+            {
+                throw new Exception("Sort is invalid");
+            }
+            else if (sort != "ASC" && sort != "DESC")
+            {
+                throw new Exception("Sort is invalid");
+            }
+            return await _userRepository.GetUsers(currentPage, pageSize, sort);
         }
 
         public async Task<LoginDTO> Login(LoginViewModel loginViewModel)
@@ -92,6 +154,61 @@ namespace MovieTicketBookingBe.Services
                 accessToken = accessToken,
                 refreshToken = refreshToken
             };
+        }
+
+        public async Task<UserDTO> UpdateUserById(int id, int userIdUpdate, UpdateUserVM updateUserVM)
+        {
+            if (id <= 0)
+            {
+                throw new Exception("Id is invalid");
+            }
+            if (updateUserVM == null)
+            {
+                throw new Exception("UpdateUserVM is null");
+            }
+            if (updateUserVM.roleIds == null)
+            {
+                throw new Exception("RoleIds is null");
+            }
+            if (updateUserVM.roleIds.Count == 0)
+            {
+                throw new Exception("RoleIds is empty");
+            }
+            if (updateUserVM.roleIds.Any(r => r <= 0))
+            {
+                throw new Exception("RoleIds is invalid");
+            }
+            var userUpdate = await _userRepository.GetUserById(userIdUpdate);
+            if (userUpdate == null)
+            {
+                throw new Exception("User update not found");
+            }
+            var roleUserUpdate = await _roleRepository.GetRolesByUserId(userIdUpdate);
+            if (roleUserUpdate.Count <= 0)
+            {
+                throw new Exception("Role not found");
+            }
+
+            var user = await _userRepository.GetUserById(id);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            var roleUser = await _roleRepository.GetRolesByUserId(id);
+            if (roleUser.Count <= 0)
+            {
+                throw new Exception("Role not found");
+            }
+
+            if (roleUser.Any(r => r.RoleCode == "ADMIN"))
+            {
+                if (!roleUserUpdate.Any(r => r.RoleCode == "ADMIN"))
+                {
+                    throw new Exception("You can't update admin");
+                }
+            }
+
+            return await _userRepository.UpdateUserById(id, updateUserVM);
         }
     }
 }

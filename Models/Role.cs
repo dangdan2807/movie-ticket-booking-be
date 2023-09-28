@@ -14,16 +14,16 @@ namespace MovieTicketBookingBe.Models
 
         [Required]
         [Column("role_code")]
-        [StringLength(50)]
-        public string RoleCode { get; set; }
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Role name must be 1 - 50 characters")]
+        public string RoleCode { get; set; } = "";
 
         [Required]
         [Column("role_name")]
-        [StringLength(100)]
-        public string RoleName { get; set; }
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Role name must be 3 - 100 characters")]
+        public string RoleName { get; set; } = "";
 
         [Column("description")]
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "Description maximum 255 characters")]
         public string Description { get; set; } = "";
 
         [Required]
@@ -49,6 +49,6 @@ namespace MovieTicketBookingBe.Models
         public DateTime? DeleteAt { get; set; }
 
         [NotMapped]
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<UserRole>? UserRoles { get; set; }
     }
 }

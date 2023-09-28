@@ -14,23 +14,23 @@ namespace MovieTicketBookingBe.Models
 
         [Required]
         [Column("full_name")]
-        [StringLength(100)]
-        public string FullName { get; set; }
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Fullname must be between 3 - 100 characters")]
+        public string FullName { get; set; } = null!;
 
         [Required]
         [Column("password")]
-        [StringLength(255)]
-        public string Password { get; set; }
+        [StringLength(255, MinimumLength = 6, ErrorMessage = "Password must be between 6 - 255 characters")]
+        public string Password { get; set; } = null!;
 
         [Required]
         [Column("phone")]
         [StringLength(20)]
-        [RegularExpression(@"^\+?(\d{10,15})$", ErrorMessage = "Invalid phone number")]
-        public string Phone { get; set; }
+        [RegularExpression(@"^\+?(\d{10,12})$", ErrorMessage = "Invalid phone number")]
+        public string Phone { get; set; } = null!;
 
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "Address maximum 255 characters")]
         [Column("address")]
-        public string Address { get; set; }
+        public string Address { get; set; } = null!;
 
         [Required]
         [Column("status")]
@@ -46,6 +46,6 @@ namespace MovieTicketBookingBe.Models
         public int UpdateBy { get; set; }
 
         [NotMapped]
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<UserRole>? UserRoles { get; set; }
     }
 }
