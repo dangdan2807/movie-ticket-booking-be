@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTicketBookingBe.Models;
 using MovieTicketBookingBe.Models.DTO;
+using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.ViewModels;
 
 namespace MovieTicketBookingBe.Repositories
@@ -208,5 +209,91 @@ namespace MovieTicketBookingBe.Repositories
             };
         }
 
+        public async Task<User?> UpdateProfile(int userId, UpdateProfileVM updateProfileVM)
+        {
+            if (userId <= 0)
+            {
+                throw new Exception("Id is invalid");
+            }
+
+            var user = await GetUserById(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrEmpty(updateProfileVM.fullName))
+            {
+                user.FullName = updateProfileVM.fullName;
+            }
+            if (!string.IsNullOrEmpty(updateProfileVM.address))
+            {
+                user.Address = updateProfileVM.address;
+            }
+            if (!string.IsNullOrEmpty(updateProfileVM.phone))
+            {
+                user.Phone = updateProfileVM.phone;
+            }
+
+            var existingPhoneUser = await GetUserByPhone(updateProfileVM.phone);
+            if (existingPhoneUser != null && existingPhoneUser.Id != userId)
+            {
+                throw new Exception("Phone is already in use");
+            }
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(updateProfileVM.confirmPassword, user.Password);
+            if (!isPasswordValid)
+            {
+                throw new Exception("Wrong password");
+            }
+
+            user.UpdateAt = DateTime.Now;
+            user.UpdateBy = userId;
+
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
+
+        public async Task<User?> UpdatePassword(int userId, UpdatePasswordVM updatePasswordVM)
+        {
+            if (userId <= 0)
+            {
+                throw new Exception("Id is invalid");
+            }
+
+            var user = await GetUserById(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(updatePasswordVM.oldPassword, user.Password);
+            if (!isPasswordValid)
+            {
+                throw new Exception("Wrong password");
+            }
+
+            if (string.IsNullOrEmpty(updatePasswordVM.newPassword))
+            {
+                throw new Exception("New password is required");
+            }
+
+            if (string.IsNullOrEmpty(updatePasswordVM.confirmNewPassword))
+            {
+                throw new Exception("Confirm password is required");
+            }
+
+            if (updatePasswordVM.newPassword.Equals(updatePasswordVM.confirmNewPassword))
+            {
+                throw new Exception("Confirm password is not match");
+            }
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(updatePasswordVM.newPassword);
+            user.UpdateAt = DateTime.Now;
+            user.UpdateBy = userId;
+            await _context.SaveChangesAsync();
+            return user;
+        }
     }
 }

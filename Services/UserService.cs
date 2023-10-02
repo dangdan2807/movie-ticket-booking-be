@@ -210,5 +210,71 @@ namespace MovieTicketBookingBe.Services
 
             return await _userRepository.UpdateUserById(id, updateUserVM);
         }
+
+        public async Task<UserDTO> UpdateProfile(int userId, UpdateProfileVM updateProfileVM)
+        {
+            if (userId <= 0)
+            {
+                throw new Exception("Id is invalid");
+            }
+            if (updateProfileVM == null)
+            {
+                throw new Exception("UpdateProfileVM is null");
+            }
+
+            var user = await _userRepository.UpdateProfile(userId, updateProfileVM);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var role = await _roleRepository.GetRolesByUserId(userId);
+            return new UserDTO
+            {
+                id = user.Id,
+                fullName = user.FullName,
+                address = user.Address,
+                phone = user.Phone,
+                status = user.Status,
+                createAt = user.CreateAt,
+                roles = role.Select(r => new RoleDTO
+                {
+                    roleId = r.RoleId,
+                    roleCode = r.RoleCode,
+                    roleName = r.RoleName,
+                    description = r.Description,
+                    status = r.Status,
+                    createAt = r.CreateAt,
+                }).ToList()
+            };
+        }
+
+        public async Task<UserDTO> UpdatePassword(int userId, UpdatePasswordVM updatePasswordVM)
+        {
+            if (userId <= 0)
+            {
+                throw new Exception("Id is invalid");
+            }
+            if (updatePasswordVM == null)
+            {
+                throw new Exception("UpdatePasswordVM is null");
+            }
+
+            var user = await _userRepository.UpdatePassword(userId, updatePasswordVM);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            return new UserDTO
+            {
+                id = user.Id,
+                fullName = user.FullName,
+                address = user.Address,
+                phone = user.Phone,
+                status = user.Status,
+                createAt = user.CreateAt,
+            };
+        }
     }
 }

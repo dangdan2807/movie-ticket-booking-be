@@ -6,5 +6,6 @@ namespace MovieTicketBookingBe.Services
     {
         Task<string> GenerateAccessToken(User user);
         Task<string> GenerateRefreshToken(int userId, string token);
+        Task<TokenBlackList> RevokeToken(string accessToken);
     }
 }

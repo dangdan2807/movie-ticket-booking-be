@@ -34,12 +34,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(settings["DefaultConnection"], new MySqlServerVersion(new Version(8, 0, 26)))
 );
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-
 // jwt
 builder.Services.AddAuthorization();
 var sercetKey = builder.Configuration.GetRequiredSection("Jwt")["SercetKey"];
@@ -62,6 +56,13 @@ builder.Services
             ClockSkew = TimeSpan.Zero
         };
     });
+
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -120,6 +121,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<TokenRevokeMiddleware>();
 app.UseMiddleware<CustomErrorResponseMiddleware>();
 
 app.UseHttpsRedirection();

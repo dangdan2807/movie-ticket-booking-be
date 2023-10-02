@@ -71,35 +71,6 @@ namespace MovieTicketBookingBe.Controllers
             }
         }
 
-        [HttpGet("profile")]
-        [Authorize]
-        public async Task<IActionResult> GetProfile()
-        {
-            try
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) + "";
-                int userIdInt = Int32.Parse(userId);
-
-                var userDTO = await _userService.GetUserById(userIdInt);
-                if (userDTO == null)
-                {
-                    throw new Exception("User not found");
-                }
-
-                var successResponse = new SuccessResponse(
-                    HttpStatusCode.OK,
-                    "Get user successfully",
-                    userDTO
-                );
-                return Ok(successResponse);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex.Message);
-                return BadRequest(new ErrorResponse(HttpStatusCode.BadRequest, ex.Message));
-            }
-        }
-
         [HttpPut("{id}")]
         [Authorize(Roles = "ADMIN, MOD")]
         public async Task<IActionResult> UpdateUserById(int id, UpdateUserVM updateUserVM)
@@ -119,6 +90,92 @@ namespace MovieTicketBookingBe.Controllers
                     HttpStatusCode.OK,
                     "Update user successfully",
                     user
+                );
+                return Ok(successResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return BadRequest(new ErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+        }
+
+        [HttpGet("profile")]
+        [Authorize]
+        public async Task<IActionResult> GetProfile()
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) + "";
+                int userIdInt = Int32.Parse(userId);
+
+                var userDTO = await _userService.GetUserById(userIdInt);
+                if (userDTO == null)
+                {
+                    throw new Exception("User not found");
+                }
+
+                var successResponse = new SuccessResponse(
+                    HttpStatusCode.OK,
+                    "Get user profile successfully",
+                    userDTO
+                );
+                return Ok(successResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return BadRequest(new ErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+        }
+
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile(UpdateProfileVM updateProfileVM)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) + "";
+                int userIdInt = Int32.Parse(userId);
+
+                var userDTO = await _userService.UpdateProfile(userIdInt, updateProfileVM);
+                if (userDTO == null)
+                {
+                    throw new Exception("User not found");
+                }
+
+                var successResponse = new SuccessResponse(
+                    HttpStatusCode.OK,
+                    "Update user info successfully",
+                    userDTO
+                );
+                return Ok(successResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return BadRequest(new ErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+        }
+
+        [HttpPut("profile/password")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordVM updatePasswordVM)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) + "";
+                int userIdInt = Int32.Parse(userId);
+
+                var userDTO = await _userService.UpdatePassword(userIdInt, updatePasswordVM);
+                if (userDTO == null)
+                {
+                    throw new Exception("User not found");
+                }
+
+                var successResponse = new SuccessResponse(
+                    HttpStatusCode.OK,
+                    "Update user password successfully"
                 );
                 return Ok(successResponse);
             }

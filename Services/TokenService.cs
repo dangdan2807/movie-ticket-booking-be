@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace MovieTicketBookingBe.Services
 {
@@ -12,18 +13,21 @@ namespace MovieTicketBookingBe.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly ITokenRepository _tokenRepository;
         private readonly IConfiguration _config;
         private readonly Serilog.ILogger _logger;
 
         public TokenService(
             IConfiguration config, 
             IUserRepository userRepository, 
+            ITokenRepository tokenRepository,
             IRoleRepository roleRepository,
             Serilog.ILogger logger
         )
         {
             _config = config;
             _userRepository = userRepository;
+            _tokenRepository = tokenRepository;
             _roleRepository = roleRepository;
             _logger = logger;
         }
@@ -72,16 +76,23 @@ namespace MovieTicketBookingBe.Services
                 rng.GetBytes(randomNumber);
                 var refreshToken = Convert.ToBase64String(randomNumber);
                 var now = DateTime.UtcNow;
-                //var tokenResponse = new TokenResponse
-                //{
-                //    userId = userId,
-                //    refreshToken = refreshToken,
-                //    accessToken = token,
-                //    expRefreshToken = DateTime.UtcNow.AddDays(7),
-                //};
-                //await _tokenRepository.AddToken(tokenResponse);
                 return refreshToken;
             }
+        }
+
+        public async Task<TokenBlackList> RevokeToken(string accessToken)
+        {
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                throw new Exception("Access token is required");
+            }
+
+            var token = await _tokenRepository.RevokeToken(accessToken);
+            if (token == null)
+            {
+                throw new Exception("Access token is invalid");
+            }
+            return token;
         }
     }
 }
