@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:latest
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: movie_ticket_booking
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - ./Database/import.sql:/docker-entrypoint-initdb.d/import.sql
+    command: --init-file /docker-entrypoint-initdb.d/import.sql
+
+  seq:
+    image: datalust/seq:latest
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 0.5G
+    #     reservations:
+    #       memory: 0.5G
+    ports:
+      - "5341:5341"
+    # volumes:
+      # - /datadrive:/data
+    environment:
+      - ACCEPT_EULA=Y
+
+  web-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "13080:80"
+      - "13443:443"
+    depends_on:
+      - mysql
+      - seq
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=movie_ticket_booking;User=admin;Password=123456

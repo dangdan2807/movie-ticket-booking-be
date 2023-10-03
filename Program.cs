@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MovieTicketBookingBe.Middlewares;
-using MovieTicketBookingBe.Models;
-using MovieTicketBookingBe.Repositories;
-using MovieTicketBookingBe.Services;
+using MovieTicketBookingBe.src.Middlewares;
+using MovieTicketBookingBe.src.Models;
+using MovieTicketBookingBe.src.Repositories;
+using MovieTicketBookingBe.src.Services;
 using Serilog;
 using Serilog.Exceptions;
 using System.Text;
@@ -118,9 +118,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseMiddleware<TokenRevokeMiddleware>();
 app.UseMiddleware<CustomErrorResponseMiddleware>();
 
