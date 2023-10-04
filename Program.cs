@@ -20,7 +20,7 @@ Log.Logger = new LoggerConfiguration()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithMachineName()
                 .WriteTo.Console()
-                .WriteTo.Seq("http://localhost:5341", Serilog.Events.LogEventLevel.Information)
+                .WriteTo.Seq("http://seq:5341", Serilog.Events.LogEventLevel.Information)
                 .CreateLogger();
 
 builder.Host.UseSerilog((context, loggerConfig)

@@ -14,19 +14,16 @@ services:
     command: --init-file /docker-entrypoint-initdb.d/import.sql
 
   seq:
+    container_name: seq
     image: datalust/seq:latest
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 0.5G
-    #     reservations:
-    #       memory: 0.5G
     ports:
-      - "5341:5341"
-    # volumes:
-      # - /datadrive:/data
+      - "5341:80"
+    volumes:
+      - ./seq-data:/data
     environment:
       - ACCEPT_EULA=Y
+      - SEQ_UI=1
+    restart: always
 
   web-api:
     build:
