@@ -1,6 +1,7 @@
 ﻿using MovieTicketBookingBe.src.Models;
 using MovieTicketBookingBe.src.Models.DTO;
 using MovieTicketBookingBe.src.Repositories;
+using MovieTicketBookingBe.src.ViewModels;
 
 namespace MovieTicketBookingBe.src.Services
 {
@@ -77,17 +78,17 @@ namespace MovieTicketBookingBe.src.Services
             };
         }
 
-        public async Task<GetRolesDTO> GetRoles(int currentPage = 1, int pageSize = 10, string sort = "ASC")
+        public async Task<GetRolesDTO> GetRoles(PaginationVM paginationVM, string? keyword, bool? status = true)
         {
-            if (currentPage <= 0 || pageSize <= 0)
+            if (paginationVM.currentPage <= 0 || paginationVM.pageSize <= 0)
             {
                 throw new Exception("Page is invalid");
             }
-            if (sort != "ASC" && sort != "DESC")
+            if (paginationVM.sort.Equals("ASC") && paginationVM.sort.Equals("DESC"))
             {
                 throw new Exception("Sort is invalid");
             }
-            return await _roleRepository.GetRoles(currentPage, pageSize, sort);
+            return await _roleRepository.GetRoles(paginationVM, keyword, status);
         }
 
         public async Task<RoleDTO> UpdateRoleById(int id, int userId, Role role)

@@ -49,6 +49,38 @@ INSERT INTO `roles` VALUES (1,'Admin',_binary '','2023-09-26 20:25:03',NULL,1,N
 UNLOCK TABLES;
 
 --
+-- Table structure for table `short_urls`
+--
+
+DROP TABLE IF EXISTS `short_urls`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `short_urls` (
+  `hash_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `long_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `short_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime DEFAULT NULL,
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `user_id` int NOT NULL,
+  `click_count` bigint unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`hash_id`),
+  KEY `fk_user_short_url` (`user_id`),
+  CONSTRAINT `fk_user_short_url` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `short_urls`
+--
+
+LOCK TABLES `short_urls` WRITE;
+/*!40000 ALTER TABLE `short_urls` DISABLE KEYS */;
+INSERT INTO `short_urls` VALUES ('296f90b82b9494641e5ff6b7b8b3263672f13fa6c0b554486f938d1020c3307c','https://chat.openai.com/c/94d522b9-eb3d-452a-bd03-692d26ffb641','bGeKmcxr_','2023-10-06 05:52:29',NULL,_binary '',1,0);
+/*!40000 ALTER TABLE `short_urls` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `token_black_lists`
 --
 
@@ -134,6 +166,60 @@ UNLOCK TABLES;
 --
 -- Dumping routines for database 'movie_ticket_booking'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `Proc_GetShortUrls` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Proc_GetShortUrls`(
+    IN in_Keyword NVARCHAR(255),
+    IN in_Status BOOLEAN,
+    IN in_Offset INT,
+    IN in_endRecord INT,
+    IN in_UserId INT,
+    OUT out_TotalRecord INT
+)
+begin
+	DECLARE v_Total INT;
+	set v_Total = 0;
+	set in_Keyword = '';
+	set in_Status = 1;
+	set in_UserId = null;
+
+    SELECT COUNT(*) INTO v_Total
+    FROM Short_Urls
+    WHERE (in_Keyword = '' OR 
+    	long_url LIKE CONCAT('%', in_Keyword, '%') or 
+    	short_url LIKE CONCAT('%', in_Keyword, '%') or 
+    	Hash_Id LIKE CONCAT('%', in_Keyword, '%')
+    	)
+    	AND (in_Status is NULL OR Status = in_Status)
+		and (in_UserId is null or User_Id = in_UserId);
+
+    SET out_TotalRecord = v_Total;
+
+    SELECT Hash_Id, Long_Url, short_url, Status, click_count, User_Id, create_at, update_at
+    FROM Short_Urls
+    WHERE (in_Keyword = '' OR 
+    	long_url LIKE CONCAT('%', in_Keyword, '%') or 
+    	short_url LIKE CONCAT('%', in_Keyword, '%') or 
+    	Hash_Id LIKE CONCAT('%', in_Keyword, '%')
+    	)
+    	AND (in_Status is NULL OR Status = in_Status)
+		and (in_UserId is null or User_Id = in_UserId)
+    LIMIT in_endRecord
+    OFFSET in_Offset;
+END $$
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -144,4 +230,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-02 11:26:00
+-- Dump completed on 2023-10-07 16:35:05

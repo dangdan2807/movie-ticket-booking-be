@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTicketBookingBe.src.Models;
-using MovieTicketBookingBe.src.Models;
 using MovieTicketBookingBe.src.Models.DTO;
-using MovieTicketBookingBe.src.Services;
 using MovieTicketBookingBe.src.ViewModels;
+using MySqlConnector;
 
 namespace MovieTicketBookingBe.src.Repositories
 {
@@ -12,12 +11,17 @@ namespace MovieTicketBookingBe.src.Repositories
         private readonly AppDbContext _context;
         private readonly IRoleRepository _roleRepository;
         private readonly Serilog.ILogger _logger;
+        private readonly IConfiguration _configuration;
 
-        public UserRepository(AppDbContext context, IRoleRepository roleRepository, Serilog.ILogger logger)
+        private string _connectionString;
+
+        public UserRepository(AppDbContext context, IRoleRepository roleRepository, Serilog.ILogger logger, IConfiguration configuration)
         {
             _context = context;
             _roleRepository = roleRepository;
             _logger = logger;
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("DefaultConnection");
         }
 
         public async Task<User> CreateUser(User user)
@@ -45,6 +49,7 @@ namespace MovieTicketBookingBe.src.Repositories
             {
                 throw new Exception("Id is invalid");
             }
+
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -57,45 +62,68 @@ namespace MovieTicketBookingBe.src.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Phone == phone);
         }
 
-        public async Task<GetUsersDTO> GetUsers(int currentPage = 1, int pageSize = 10, string sort = "ASC")
+        public async Task<GetUsersDTO> GetUsers(PaginationVM paginationVM, string? keyword = "", bool? status = null)
         {
-            if (currentPage <= 0)
+            if (paginationVM.currentPage <= 0)
             {
                 throw new Exception("Current page is invalid");
             }
 
-            if (pageSize <= 0)
+            if (paginationVM.pageSize <= 0)
             {
                 throw new Exception("Page size is invalid");
             }
 
-            if (string.IsNullOrEmpty(sort))
+            if (string.IsNullOrEmpty(paginationVM.sort.ToString()))
             {
                 throw new Exception("Sort is invalid");
             }
-            else if (sort != "ASC" && sort != "DESC")
+            else if (paginationVM.sort.Equals("ASC") && paginationVM.sort.Equals("DESC"))
             {
                 throw new Exception("Sort is invalid");
             }
 
             List<User> users = new List<User>();
-            if (sort.Equals("DESC"))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                users = await _context.Users
-                .OrderByDescending(x => x.CreateAt)
-                .Skip((currentPage - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                connection.Open();
+
+                int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
+                int limit = paginationVM.pageSize;
+                string queryString = @"SELECT * FROM Users WHERE (full_name LIKE @keyword OR Phone LIKE @keyword) and status = @status ORDER BY Create_At " +
+                    paginationVM.sort + " LIMIT @skip, @limit";
+                MySqlCommand command = new MySqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
+                if (status != null)
+                {
+                    command.Parameters.AddWithValue("@status", status);
+                }
+                command.Parameters.AddWithValue("@skip", skip);
+                command.Parameters.AddWithValue("@limit", limit);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        User user = new User
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("user_id")),
+                            FullName = reader.GetString(reader.GetOrdinal("full_name")),
+                            Phone = reader.GetString(reader.GetOrdinal("Phone")),
+                            Address = reader.GetString(reader.GetOrdinal("Address")),
+                            Status = reader.GetBoolean(reader.GetOrdinal("Status")),
+                            Password = reader.GetString(reader.GetOrdinal("Password")),
+                            CreateAt = reader.GetDateTime(reader.GetOrdinal("Create_At")),
+                        };
+
+                        users.Add(user);
+                    }
+                }
+                connection.Close();
             }
-            else
-            {
-                users = await _context.Users
-                .OrderBy(x => x.CreateAt)
-                .Skip((currentPage - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-            }
+
             var totalUsers = await _context.Users
+                .Where(x => x.FullName.Contains(keyword) || x.Phone.Contains(keyword))
                 .OrderBy(b => b.Id)
                 .CountAsync();
 
@@ -114,8 +142,8 @@ namespace MovieTicketBookingBe.src.Repositories
                 users = userList,
                 pagination = new PaginationDTO
                 {
-                    currentPage = currentPage,
-                    pageSize = pageSize,
+                    currentPage = paginationVM.currentPage,
+                    pageSize = paginationVM.pageSize,
                     totalCount = totalUsers,
                 }
             };

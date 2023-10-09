@@ -25,11 +25,11 @@ namespace MovieTicketBookingBe.src.Controllers
 
         [HttpGet]
         [Authorize(Roles = "ADMIN, MOD")]
-        public async Task<IActionResult> GetRoles(int currentPage = 1, int pageSize = 10, string sort = "ASC")
+        public async Task<IActionResult> GetRoles([FromRoute] PaginationVM paginationVM, string? keyword, bool? status = true)
         {
             try
             {
-                var rolesDTO = await _roleService.GetRoles(currentPage, pageSize, sort);
+                var rolesDTO = await _roleService.GetRoles(paginationVM, keyword, status);
 
                 var successResponse = new SuccessResponse(
                     HttpStatusCode.OK,

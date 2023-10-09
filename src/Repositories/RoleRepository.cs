@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieTicketBookingBe.src.Models.DTO;
 using MovieTicketBookingBe.src.Models;
-using MovieTicketBookingBe.src.Models.DTO;
+using MovieTicketBookingBe.src.ViewModels;
+using MySqlConnector;
 
 namespace MovieTicketBookingBe.src.Repositories
 {
@@ -9,11 +10,15 @@ namespace MovieTicketBookingBe.src.Repositories
     {
         private readonly AppDbContext _context;
         private readonly Serilog.ILogger _logger;
+        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
 
-        public RoleRepository(AppDbContext context, Serilog.ILogger logger)
+        public RoleRepository(AppDbContext context, Serilog.ILogger logger, IConfiguration configuration)
         {
             _context = context;
             _logger = logger;
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("DefaultConnection");
         }
 
         public async Task<Role> CreateRole(int userId, Role role)
@@ -64,26 +69,45 @@ namespace MovieTicketBookingBe.src.Repositories
             return role;
         }
 
-        public async Task<GetRolesDTO> GetRoles(int currentPage = 1, int pageSize = 10, string sort = "ASC")
+        public async Task<GetRolesDTO> GetRoles(PaginationVM paginationVM, string? keyword, bool? status = true)
         {
             List<Role> roles = new List<Role>();
-            if (sort.Equals("DESC"))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                roles = await _context.Roles
-                .Where(x => x.IsDeleted == false)
-                .OrderByDescending(b => b.RoleId)
-                .Skip((currentPage - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-            }
-            else
-            {
-                roles = await _context.Roles
-                .Where(x => x.IsDeleted == false)
-                .OrderBy(b => b.RoleId)
-                .Skip((currentPage - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                connection.Open();
+
+                int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
+                int limit = paginationVM.pageSize;
+                string queryString = @"SELECT * FROM roles WHERE (role_code LIKE @keyword OR role_name LIKE @keyword) and status = @status ORDER BY Create_At " +
+                    paginationVM.sort + " LIMIT @skip, @limit";
+                MySqlCommand command = new MySqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
+                if (status != null)
+                {
+                    command.Parameters.AddWithValue("@status", status);
+                }
+                command.Parameters.AddWithValue("@skip", skip);
+                command.Parameters.AddWithValue("@limit", limit);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Role role = new Role
+                        {
+                            RoleId = reader.GetInt32("role_id"),
+                            RoleName = reader.GetString("role_name"),
+                            RoleCode = reader.GetString("role_code"),
+                            Description = reader.GetString("description"),
+                            Status = reader.GetBoolean("status"),
+                            CreateAt = reader.GetDateTime("create_at"),
+                            CreateBy = reader.GetInt32("create_by"),
+                        };
+
+                        roles.Add(role);
+                    }
+                }
+                connection.Close();
             }
 
             var totalCount = await _context.Roles
@@ -105,8 +129,8 @@ namespace MovieTicketBookingBe.src.Repositories
                 roles = rolesList,
                 pagination = new PaginationDTO
                 {
-                    currentPage = currentPage,
-                    pageSize = pageSize,
+                    currentPage = paginationVM.currentPage,
+                    pageSize = paginationVM.pageSize,
                     totalCount = totalCount,
                 }
             };

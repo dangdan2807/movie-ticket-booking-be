@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MovieTicketBookingBe.src.Services
+namespace MovieTicketBookingBe.src.ViewModels
 {
     public class UpdatePasswordVM
     {

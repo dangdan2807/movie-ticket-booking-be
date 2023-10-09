@@ -9,7 +9,7 @@ namespace MovieTicketBookingBe.src.Services
         Task<UserDTO> CreateUser(User user);
         Task<UserDTO?> GetUserById(int id);
         Task<UserDTO?> GetUserByPhone(string phone);
-        Task<GetUsersDTO> GetUsers(int currentPage = 1, int pageSize = 10, string sort = "ASC");
+        Task<GetUsersDTO> GetUsers(PaginationVM paginationVM, string? keyword = "", bool? status = null);
         Task<LoginDTO> Login(LoginViewModel loginViewModel);
         Task<UserDTO> UpdateUserById(int id, int userIdUpdate, UpdateUserVM updateUserVM);
         Task<UserDTO> UpdateProfile(int userId, UpdateProfileVM updateProfileVM);

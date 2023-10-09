@@ -109,27 +109,27 @@ namespace MovieTicketBookingBe.src.Services
             };
         }
 
-        public async Task<GetUsersDTO> GetUsers(int currentPage = 1, int pageSize = 10, string sort = "ASC")
+        public async Task<GetUsersDTO> GetUsers(PaginationVM paginationVM, string? keyword = "", bool? status = null)
         {
-            if (currentPage <= 0)
+            if (paginationVM.currentPage <= 0)
             {
                 throw new Exception("Current page is invalid");
             }
 
-            if (pageSize <= 0)
+            if (paginationVM.pageSize <= 0)
             {
                 throw new Exception("Page size is invalid");
             }
 
-            if (string.IsNullOrEmpty(sort))
+            if (string.IsNullOrEmpty(paginationVM.sort.ToString()))
             {
                 throw new Exception("Sort is invalid");
             }
-            else if (sort != "ASC" && sort != "DESC")
+            else if (paginationVM.sort.ToString().Equals("ASC") && paginationVM.sort.ToString().Equals("DESC"))
             {
                 throw new Exception("Sort is invalid");
             }
-            return await _userRepository.GetUsers(currentPage, pageSize, sort);
+            return await _userRepository.GetUsers(paginationVM, keyword, status);
         }
 
         public async Task<LoginDTO> Login(LoginViewModel loginViewModel)

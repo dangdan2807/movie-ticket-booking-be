@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   mysql:
+    container_name: mysql-1
     image: mysql:latest
     ports:
       - "13306:3306"
@@ -23,12 +24,13 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SEQ_UI=1
-    restart: always
 
   web-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: web-api
+    image: dangdan2807/short-url:v1.0
     ports:
       - "13080:80"
       - "13443:443"

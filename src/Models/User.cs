@@ -47,5 +47,8 @@ namespace MovieTicketBookingBe.src.Models
 
         [NotMapped]
         public ICollection<UserRole>? UserRoles { get; set; }
+
+        [NotMapped]
+        public ICollection<ShortUrl>? ShortUrls { get; set; }
     }
 }
