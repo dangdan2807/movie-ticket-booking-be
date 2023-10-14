@@ -7,11 +7,11 @@ services:
       - "13306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: movie_ticket_booking
+      MYSQL_DATABASE: short_urls
       MYSQL_USER: admin
       MYSQL_PASSWORD: 123456
     volumes:
-      - ./Database/import.sql:/docker-entrypoint-initdb.d/import.sql
+      - ./src/short_url/Database/import.sql:/docker-entrypoint-initdb.d/import.sql
     command: --init-file /docker-entrypoint-initdb.d/import.sql
 
   seq:
@@ -26,11 +26,11 @@ services:
       - SEQ_UI=1
 
   web-api:
+    container_name: web-api
     # build:
     #   context: .
-    #   dockerfile: Dockerfile
-    container_name: web-api
-    image: dangdan2807/short-url:v1.0
+    #   dockerfile: ./src/short_url/Dockerfile
+    image: dangdan2807/short-url:v1.1
     ports:
       - "13080:80"
       - "13443:443"
@@ -38,4 +38,4 @@ services:
       - mysql
       - seq
     environment:
-      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=movie_ticket_booking;User=admin;Password=123456
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=short_urls;User=admin;Password=123456
