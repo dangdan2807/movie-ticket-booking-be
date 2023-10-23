@@ -84,7 +84,7 @@ namespace MovieTicketBookingBe.Repositories
             ShortUrl shortUrl = new ShortUrl();
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                string queryString = "select * from short_urls where is_deleted = 0 and hash_id = @hashId " + 
+                string queryString = "select * from short_urls where is_deleted = 0 and hash_id = @hashId " +
                     (userId == 0 ? "" : "and user_id = @userId ") + "limit 1";
                 MySqlCommand cmd = new MySqlCommand(queryString, connection);
                 cmd.Parameters.AddWithValue("@hashId", hashId);

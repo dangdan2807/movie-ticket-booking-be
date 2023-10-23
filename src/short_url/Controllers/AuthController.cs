@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.Models;
 using MovieTicketBookingBe.Models.Response;
+using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.ViewModels;
 using System.Net;
 using System.Text.RegularExpressions;

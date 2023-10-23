@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 using MovieTicketBookingBe.Models;
 using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.ViewModels;
+using MySqlConnector;
 
 namespace MovieTicketBookingBe.Repositories
 {

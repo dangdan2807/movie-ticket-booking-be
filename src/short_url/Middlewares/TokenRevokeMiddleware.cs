@@ -1,5 +1,5 @@
-﻿using MovieTicketBookingBe.Repositories;
-using MovieTicketBookingBe.Models.Response;
+﻿using MovieTicketBookingBe.Models.Response;
+using MovieTicketBookingBe.Repositories;
 using System.Net;
 using System.Text.Json;
 

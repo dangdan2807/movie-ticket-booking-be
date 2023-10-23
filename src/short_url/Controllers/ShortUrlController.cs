@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.Models.Response;
+using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.ViewModels;
 using System.Net;
 using System.Security.Claims;
