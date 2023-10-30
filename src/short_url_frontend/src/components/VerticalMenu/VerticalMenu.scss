@@ -1,0 +1,16 @@
+.dashboard {
+  &__menu {
+    height: 89.5vh !important;
+  }
+  &__nav-item {
+    border-radius: 0.4rem;
+    margin-top: 0.5rem;
+    &:hover {
+      background-color: #f4f6fa;
+    }
+    &.active {
+      background-color: #edf2ff;
+      color: #0c3ebb !important;
+    }
+  }
+}

@@ -42,18 +42,20 @@ namespace MovieTicketBookingBe.Middlewares
                     "Access is denied"
                 )));
             }
-            else if (statusCode == 400)
-            {
-                var message = context.Response.Headers["Message"];
-                context.Response.Clear();
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            //else if (statusCode == 400)
+            //{
+            //    var _message = context.Response.Headers["Message"];
 
-                await context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse(
-                    HttpStatusCode.BadRequest,
-                    message
-                )));
-            }
+            //    context.Response.Clear();
+            //    context.Response.ContentType = "application/json";
+            //    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            //    //_logger.Error(_message);
+            //    await context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse(
+            //        HttpStatusCode.BadRequest,
+            //        _message
+            //    )));
+            //}
         }
     }
 }

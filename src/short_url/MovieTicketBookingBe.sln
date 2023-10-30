@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShortUrlBachEnd", "ShortUrl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B961D964-3E63-4032-8308-603EA57D84FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShortUrlFrontEnd", "..\ShortUrlFrontEnd_C\ShortUrlFrontEnd.csproj", "{C6F7EC67-0E28-4400-9E33-4CFBC59E2777}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,17 +17,12 @@ Global
 		{46C13583-0092-4B91-B2E2-15F96AC6C364}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46C13583-0092-4B91-B2E2-15F96AC6C364}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46C13583-0092-4B91-B2E2-15F96AC6C364}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6F7EC67-0E28-4400-9E33-4CFBC59E2777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6F7EC67-0E28-4400-9E33-4CFBC59E2777}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6F7EC67-0E28-4400-9E33-4CFBC59E2777}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6F7EC67-0E28-4400-9E33-4CFBC59E2777}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{46C13583-0092-4B91-B2E2-15F96AC6C364} = {B961D964-3E63-4032-8308-603EA57D84FD}
-		{C6F7EC67-0E28-4400-9E33-4CFBC59E2777} = {B961D964-3E63-4032-8308-603EA57D84FD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA008618-DF81-480C-B06F-01124DB73C6F}

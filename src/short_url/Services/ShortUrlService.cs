@@ -47,7 +47,7 @@ namespace MovieTicketBookingBe.Services
         {
             if (CreateShortUrlVM == null)
             {
-                throw new ArgumentNullException("shortUrl is null");
+                throw new Exception("shortUrl is null");
             }
             if (userId <= 0)
             {
