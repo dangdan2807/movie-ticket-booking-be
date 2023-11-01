@@ -1,0 +1,15 @@
+.short-link-item {
+  &__btn {
+    height: 2.5rem;
+  }
+  &__dropdown {
+    cursor: pointer !important;
+    &:active {
+      background-color: transparent !important;
+      color: black;
+    }
+  }
+  &__text {
+    font-size: 0.9rem;
+  }
+}

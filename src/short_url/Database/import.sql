@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
--- Host: localhost    Database: movie_ticket_booking
+-- Host: localhost    Database: short_urls
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -79,7 +79,7 @@ CREATE TABLE `short_urls` (
 
 LOCK TABLES `short_urls` WRITE;
 /*!40000 ALTER TABLE `short_urls` DISABLE KEYS */;
-INSERT INTO `short_urls` VALUES ('0311e6be1a3f8cc1150f4e9fe0a82ae08b914d41d59c8b0398f0332b5e219d94','https://chat.openai.com/c/94d522b9-eb3d-452a-bd03-692d26ffb641','kKrgLG-toRa','2023-10-11 10:16:25','2023-10-12 09:43:13',_binary '',3,0,_binary '','2023-10-12 09:43:13'),('296f90b82b9494641e5ff6b7b8b3263672f13fa6c0b554486f938d1020c3307c','https://chat.openai.com/c/94d522b9-eb3d-452a-bd03-692d26ffb641','bGeKmcxr_','2023-10-06 05:52:29',NULL,_binary '',1,0,_binary '\0',NULL),('5ea73704c1d6bdc7031b32ead38739f47e1a117b8586c1c4b38ebb24f09b7afb','https://www.facebook.com/profile','RULIeHhQ','2023-10-11 10:16:57','2023-10-12 09:23:32',_binary '',3,0,_binary '\0',NULL);
+INSERT INTO `short_urls` VALUES ('0311e6be1a3f8cc1150f4e9fe0a82ae08b914d41d59c8b0398f0332b5e219d94','https://chat.openai.com/c/94d522b9-eb3d-452a-bd03-692d26ffb641','kKrgLG-toRa','2023-10-11 10:16:25','2023-10-12 09:43:13',_binary '',3,0,_binary '','2023-10-12 09:43:13'),('296f90b82b9494641e5ff6b7b8b3263672f13fa6c0b554486f938d1020c3307c','https://chat.openai.com/c/94d522b9-eb3d-452a-bd03-692d26ffb641','bGeKmcxr_','2023-10-06 05:52:29',NULL,_binary '',1,0,_binary '\0',NULL),('9b5950dfd82b891449aa3cb037e2947e7dbbdc8040f97517ce5286edf24d8b8d','https://6-4-0--reactstrap.netlify.app/components/form/23232','kDMAcaj_','2023-10-23 04:14:33','2023-10-31 03:20:41',_binary '',3,6,_binary '\0',NULL),('ffe60fb9a729f7382300a3623525acd7fbdb340c18fdaad7c3ed19c7d7aed5ff','https://6-4-0--reactstrap.netlify.app/components/form/','SkWYaqwvfwW','2023-10-23 04:18:10',NULL,_binary '',3,0,_binary '\0',NULL);
 /*!40000 ALTER TABLE `short_urls` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,7 +95,7 @@ CREATE TABLE `token_black_lists` (
   `access_token` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `token_black_lists` (
 
 LOCK TABLES `token_black_lists` WRITE;
 /*!40000 ALTER TABLE `token_black_lists` DISABLE KEYS */;
-INSERT INTO `token_black_lists` VALUES (1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTU4OTQ0NTIsImV4cCI6MTY5NjQ5OTI1MiwiaWF0IjoxNjk1ODk0NDUyfQ.hxiZciqB4HmF8i7K8sEWjbz8JCGjiHZWSi9vKhQRIUA','2023-09-29 03:41:30'),(2,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTU5NTkxNTAsImV4cCI6MTY5NjU2Mzk1MCwiaWF0IjoxNjk1OTU5MTUwfQ.IhvGqp7ZG1ysFOcioQtTUO8Dk65iYgqXr9vYh3ZexSg','2023-09-29 03:45:57'),(3,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTU5NTkyMTUsImV4cCI6MTY5NjU2NDAxNSwiaWF0IjoxNjk1OTU5MjE1fQ.myDXO6OsidwBrD8xifTNerPkGN_76BfiCkQz2yyaq2c','2023-09-29 03:46:57'),(4,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTU5NTk1NzMsImV4cCI6MTY5NjU2NDM3MywiaWF0IjoxNjk1OTU5NTczfQ.CSEPeFY6rTTwcdx9LsneikD2riTIXqbP3p-pAnc2yFA','2023-09-29 03:53:06'),(5,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTYyMTkwNjQsImV4cCI6MTY5NjgyMzg2NCwiaWF0IjoxNjk2MjE5MDY0fQ.Q9qm3_13plN5RSvTyfTJ3glyp2h8_dJ4-2AOVDblFTQ','2023-10-02 03:57:50');
+INSERT INTO `token_black_lists` VALUES (1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTU4OTQ0NTIsImV4cCI6MTY5NjQ5OTI1MiwiaWF0IjoxNjk1ODk0NDUyfQ.hxiZciqB4HmF8i7K8sEWjbz8JCGjiHZWSi9vKhQRIUA','2023-09-29 03:41:30'),(2,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTU5NTkxNTAsImV4cCI6MTY5NjU2Mzk1MCwiaWF0IjoxNjk1OTU5MTUwfQ.IhvGqp7ZG1ysFOcioQtTUO8Dk65iYgqXr9vYh3ZexSg','2023-09-29 03:45:57'),(3,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTU5NTkyMTUsImV4cCI6MTY5NjU2NDAxNSwiaWF0IjoxNjk1OTU5MjE1fQ.myDXO6OsidwBrD8xifTNerPkGN_76BfiCkQz2yyaq2c','2023-09-29 03:46:57'),(4,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTU5NTk1NzMsImV4cCI6MTY5NjU2NDM3MywiaWF0IjoxNjk1OTU5NTczfQ.CSEPeFY6rTTwcdx9LsneikD2riTIXqbP3p-pAnc2yFA','2023-09-29 03:53:06'),(5,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6WyJBRE1JTiIsIlZJUCJdLCJuYmYiOjE2OTYyMTkwNjQsImV4cCI6MTY5NjgyMzg2NCwiaWF0IjoxNjk2MjE5MDY0fQ.Q9qm3_13plN5RSvTyfTJ3glyp2h8_dJ4-2AOVDblFTQ','2023-10-02 03:57:50'),(6,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzIiwicm9sZSI6Ik1FTUJFUiIsIm5iZiI6MTY5ODMwMzMxMSwiZXhwIjoxNjk4OTA4MTExLCJpYXQiOjE2OTgzMDMzMTF9.PoKzzQ3KdX9Itt7cbzv2qP7lxBvMaLWbElXc5Jbxb6k','2023-10-31 01:45:56');
 /*!40000 ALTER TABLE `token_black_lists` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +167,7 @@ INSERT INTO `users` VALUES (1,'nguyen van an','$2a$12$OjXG/48JwsWUohtYjdDtleUSEs
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'movie_ticket_booking'
+-- Dumping routines for database 'short_urls'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `Proc_GetShortUrls` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -181,52 +181,102 @@ UNLOCK TABLES;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `Proc_GetShortUrls`(
 
+
+
     IN in_Keyword NVARCHAR(255),
+
+
 
     IN in_Status BOOLEAN,
 
+
+
     IN in_Offset INT,
+
+
 
     IN in_endRecord INT,
 
+
+
     IN in_UserId INT,
+
+
 
     OUT out_TotalRecord INT
 
+
+
 )
 begin
+
+
 
 	DECLARE v_Total INT;
 
 
 
+
+
+
+
 	set v_Total = 0;
 
+
+
 	set in_Keyword = '';
+
+
 
 	set in_Status = 1;
 
 
 
+
+
+
+
     SELECT COUNT(*) INTO v_Total
+
+
 
     FROM Short_Urls
 
+
+
     WHERE (in_Keyword = '' OR 
+
+
 
     	long_url LIKE CONCAT('%', in_Keyword, '%') or 
 
+
+
     	short_url LIKE CONCAT('%', in_Keyword, '%') or 
+
+
 
     	Hash_Id LIKE CONCAT('%', in_Keyword, '%')
 
+
+
     	)
+
+
 
     	AND (in_Status is NULL OR Status = in_Status)
 
+
+
 		and (in_UserId is null or User_Id = in_UserId)
 
+
+
 		and is_deleted = 0;
+
+
+
+
 
 
 
@@ -234,29 +284,57 @@ begin
 
 
 
+
+
+
+
     SELECT Hash_Id, Long_Url, short_url, Status, click_count, User_Id, create_at, update_at
+
+
 
     FROM Short_Urls
 
+
+
     WHERE (in_Keyword = '' OR 
+
+
 
     	long_url LIKE CONCAT('%', in_Keyword, '%') or 
 
+
+
     	short_url LIKE CONCAT('%', in_Keyword, '%') or 
+
+
 
     	Hash_Id LIKE CONCAT('%', in_Keyword, '%')
 
+
+
     	)
+
+
 
     	AND (in_Status is NULL OR Status = in_Status)
 
+
+
 		and (in_UserId is null or User_Id = in_UserId)
+
+
 
 		and is_deleted = 0
 
+
+
     LIMIT in_endRecord
 
+
+
     OFFSET in_Offset;
+
+
 
 END $$
 DELIMITER ;
@@ -274,4 +352,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-12 16:52:05
+-- Dump completed on 2023-11-01  9:54:02

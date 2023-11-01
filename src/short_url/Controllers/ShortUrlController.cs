@@ -192,6 +192,37 @@ namespace MovieTicketBookingBe.Controllers
             }
         }
 
+        [HttpPut("short-link/{shortLink}/click")]
+        public async Task<IActionResult> UpdateClickCountByShortLink(string shortLink)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(shortLink))
+                {
+                    throw new Exception("short url is required");
+                }
+                var updateShortUrlDTO = await _shortUrlService.UpdateClickCountByShortLink(shortLink);
+
+                return Ok(new SuccessResponse(
+                    HttpStatusCode.OK,
+                    "Update short url successfully",
+                    updateShortUrlDTO
+                ));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.Error(ex.Message);
+                return StatusCode(StatusCodes.Status403Forbidden);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse(
+                    HttpStatusCode.BadRequest,
+                    ex.Message
+                ));
+            }
+        }
+
         [HttpDelete("short-link/{shortLink}")]
         [Authorize(Roles = "ADMIN, MOD, VIP, MEMBER")]
         public async Task<IActionResult> DeleteShortUrlByShortLink(string shortLink)

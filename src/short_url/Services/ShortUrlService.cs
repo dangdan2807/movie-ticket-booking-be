@@ -289,6 +289,40 @@ namespace MovieTicketBookingBe.Services
             };
         }
 
+        public async Task<ShortUrlDTO> UpdateClickCountByShortLink(string shortLink)
+        {
+            if (string.IsNullOrEmpty(shortLink))
+            {
+                throw new ArgumentNullException("short url is required");
+            }
+
+            var shortUrl = await _shortUrlRepository.GetShortUrlByShortLink(shortLink);
+            if (shortUrl == null)
+            {
+                throw new Exception("Short url not found");
+            }
+            shortUrl.ClickCount = shortUrl.ClickCount + 1;
+
+            var updateShortUrl = await _shortUrlRepository.UpdateShortUrlByShortLink(shortUrl);
+            if (updateShortUrl == null)
+            {
+                throw new Exception("Update shortUrl failed");
+            }
+
+            return new ShortUrlDTO
+            {
+                hashId = updateShortUrl.HashId,
+                longUrl = updateShortUrl.LongUrl,
+                shortUrl = updateShortUrl.ShortUrlString,
+                status = updateShortUrl.Status,
+                userId = updateShortUrl.UserId,
+                clickCount = updateShortUrl.ClickCount,
+                createdAt = updateShortUrl.CreatedAt,
+                updateAt = updateShortUrl.UpdateAt,
+            };
+        }
+
+
         public async Task<ShortUrlDTO> DeleteShortUrlByShortLink(string shortLink, int userId, List<string> roles)
         {
             if (string.IsNullOrEmpty(shortLink))

@@ -56,17 +56,15 @@ builder.Services
         };
     });
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(MyAllowSpecificOrigins,
-                          policy =>
-                          {
-                              policy.WithOrigins("*")
-                                                  .AllowAnyHeader()
-                                                  .AllowAnyMethod();
-                          });
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+        });
 });
+
 
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
@@ -142,7 +140,7 @@ app.UseMiddleware<TokenRevokeMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 

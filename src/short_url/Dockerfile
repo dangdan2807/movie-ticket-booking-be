@@ -1,17 +1,42 @@
-﻿# Sử dụng một hình ảnh .NET SDK để xây dựng ứng dụng
+﻿# # Sử dụng một hình ảnh .NET SDK để xây dựng ứng dụng
+# FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+# WORKDIR /app
+
+# # Sao chép mã nguồn ứng dụng vào hình ảnh
+# COPY . .
+
+# # Sử dụng dotnet để xây dựng ứng dụng
+# RUN dotnet restore "./ShortUrlBachEnd.csproj"
+# RUN dotnet build "./ShortUrlBachEnd.csproj" -c Release
+# RUN dotnet publish "./ShortUrlBachEnd.csproj" -c Release -o out
+
+# # Hình ảnh cuối cùng chạy ứng dụng ASP.NET Core
+# FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
+# WORKDIR /app
+# COPY --from=build /app/out ./
+# ENTRYPOINT ["dotnet", "MovieTicketBookingBe.dll"]
+
+# Use the official .NET Core SDK as a parent image
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
 
-# Sao chép mã nguồn ứng dụng vào hình ảnh
+# Copy the project file and restore any dependencies (use .csproj for the project name)
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copy the rest of the application code
 COPY . .
 
-# Sử dụng dotnet để xây dựng ứng dụng
-RUN ["dotnet", "restore"]
-RUN dotnet build -c Release
-RUN dotnet publish -c Release -o out
+# Publish the application
+RUN dotnet publish "ShortUrlBachEnd.csproj" -c Release -o out
 
-# Hình ảnh cuối cùng chạy ứng dụng ASP.NET Core
+# Build the runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/out ./
-ENTRYPOINT ["dotnet", "MovieTicketBookingBe.dll"]
+
+# Expose the port your application will run on
+EXPOSE 80
+
+# Start the application
+ENTRYPOINT ["dotnet", "ShortUrlBachEnd.dll"]

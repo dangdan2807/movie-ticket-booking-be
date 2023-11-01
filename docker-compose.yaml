@@ -4,7 +4,7 @@ services:
     container_name: mysql-1
     image: mysql:latest
     ports:
-      - "13306:3306"
+      - '13306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: short_urls
@@ -18,24 +18,29 @@ services:
     container_name: seq
     image: datalust/seq:latest
     ports:
-      - "5341:80"
+      - '5341:80'
     volumes:
       - ./seq-data:/data
     environment:
       - ACCEPT_EULA=Y
       - SEQ_UI=1
 
-  web-api:
-    container_name: web-api
-    # build:
-    #   context: .
-    #   dockerfile: ./src/short_url/Dockerfile
-    image: dangdan2807/short-url:v1.1
+  backend:
+    container_name: short-link-be
+    image: dangdan2807/short-url-be:v1.1.1
     ports:
-      - "13080:80"
-      - "13443:443"
+      - '5192:80'
+      - '7167:443'
     depends_on:
       - mysql
       - seq
     environment:
       - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=short_urls;User=admin;Password=123456
+
+  frontend:
+    container_name: short-link-fe-nginx
+    image: dangdan2807/short-url-fe:v1.0
+    ports:
+      - '44481:80'
+    environment:
+      - REACT_APP_URL_BACKEND=http://localhost:5192/api
