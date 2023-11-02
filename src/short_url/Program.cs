@@ -9,6 +9,7 @@ using MovieTicketBookingBe.Repositories;
 using MovieTicketBookingBe.Services;
 using Serilog;
 using Serilog.Exceptions;
+using ShortUrlBachEnd.Redis;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,12 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(settings["DefaultConnection"], new MySqlServerVersion(new Version(8, 0, 26)))
 );
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = settings["Redis"];
+    //options.InstanceName = "SampleInstance";
+});
 
 // jwt
 builder.Services.AddAuthorization();
@@ -67,6 +74,7 @@ builder.Services.AddCors(options =>
 
 
 
+builder.Services.AddScoped<IRedisDb, RedisDb>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();

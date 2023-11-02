@@ -3,6 +3,7 @@ using MovieTicketBookingBe.Models;
 using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.ViewModels;
 using MySqlConnector;
+using ShortUrlBachEnd.Redis;
 using System.Data;
 
 namespace MovieTicketBookingBe.Repositories
@@ -12,14 +13,16 @@ namespace MovieTicketBookingBe.Repositories
         private readonly AppDbContext _context;
         private readonly Serilog.ILogger _logger;
         private readonly IConfiguration _configuration;
+        private readonly IRedisDb _redisDb;
 
         private readonly string _connectionString;
 
-        public ShortUrlRepository(AppDbContext context, Serilog.ILogger logger, IConfiguration configuration)
+        public ShortUrlRepository(AppDbContext context, Serilog.ILogger logger, IConfiguration configuration, IRedisDb redisDb)
         {
             _context = context;
             _logger = logger;
             _configuration = configuration;
+            _redisDb = redisDb;
             _connectionString = _configuration.GetConnectionString("DefaultConnection");
         }
 
@@ -70,7 +73,7 @@ namespace MovieTicketBookingBe.Repositories
 
             _context.Entry(shortUrl).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-
+            await _redisDb.RemoveDataByKey(shortLink);
             return shortUrl;
         }
 
@@ -81,7 +84,7 @@ namespace MovieTicketBookingBe.Repositories
                 throw new ArgumentNullException("hash id is required");
             }
 
-            ShortUrl shortUrl = new ShortUrl();
+            ShortUrl shortUrl = null;
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 string queryString = "select * from short_urls where is_deleted = 0 and hash_id = @hashId " +
@@ -164,7 +167,12 @@ namespace MovieTicketBookingBe.Repositories
                 throw new ArgumentNullException("short url is required");
             }
 
-            ShortUrl shortUrlObj = null;
+            ShortUrl shortUrlObj = await _redisDb.GetDataByKey<ShortUrl>(url);
+            if (shortUrlObj != null)
+            {
+                return shortUrlObj;
+            }
+
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 string queryString = "select * from short_urls where is_deleted = 0 and short_url = @shortUrl limit 1";
@@ -190,7 +198,11 @@ namespace MovieTicketBookingBe.Repositories
                 }
                 connection.Close();
             }
-
+            if (shortUrlObj == null)
+            {
+                return null;
+            }
+            await _redisDb.SetDataByKey<ShortUrl>(url, shortUrlObj);
             return shortUrlObj;
         }
 
@@ -326,7 +338,7 @@ namespace MovieTicketBookingBe.Repositories
 
             _context.Entry(shortUrl).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-
+            await _redisDb.SetDataByKey(shortUrl.ShortUrlString, shortUrl);
             return shortUrl;
         }
     }
