@@ -178,166 +178,61 @@ UNLOCK TABLES;
 /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `Proc_GetShortUrls`(
-
-
-
     IN in_Keyword NVARCHAR(255),
-
-
-
-    IN in_Status BOOLEAN,
-
-
-
+    IN in_Status bit(1),
     IN in_Offset INT,
-
-
-
     IN in_endRecord INT,
-
-
-
     IN in_UserId INT,
-
-
-
+	IN in_StartDate Datetime,
+	IN in_EndDate Datetime,
     OUT out_TotalRecord INT
-
-
-
 )
 begin
-
-
-
 	DECLARE v_Total INT;
-
-
-
-
-
-
-
 	set v_Total = 0;
-
-
-
 	set in_Keyword = '';
 
-
-
-	set in_Status = 1;
-
-
-
-
-
-
-
     SELECT COUNT(*) INTO v_Total
-
-
-
     FROM Short_Urls
-
-
-
     WHERE (in_Keyword = '' OR 
-
-
-
+		title LIKE CONCAT('%', in_Keyword, '%') or 
     	long_url LIKE CONCAT('%', in_Keyword, '%') or 
-
-
-
     	short_url LIKE CONCAT('%', in_Keyword, '%') or 
-
-
-
     	Hash_Id LIKE CONCAT('%', in_Keyword, '%')
-
-
-
     	)
-
-
-
+		and (in_StartDate is NULL OR create_at >= in_StartDate)
+		and (in_EndDate is NULL OR create_at <= in_EndDate)
     	AND (in_Status is NULL OR Status = in_Status)
-
-
-
 		and (in_UserId is null or User_Id = in_UserId)
-
-
-
 		and is_deleted = 0;
-
-
-
-
-
-
 
     SET out_TotalRecord = v_Total;
 
-
-
-
-
-
-
-    SELECT Hash_Id, Long_Url, short_url, Status, click_count, User_Id, create_at, update_at
-
-
-
+    SELECT Hash_Id, Title, Long_Url, short_url, Status, click_count, User_Id, create_at, update_at
     FROM Short_Urls
-
-
-
     WHERE (in_Keyword = '' OR 
-
-
-
+		title LIKE CONCAT('%', in_Keyword, '%') or 
     	long_url LIKE CONCAT('%', in_Keyword, '%') or 
-
-
-
     	short_url LIKE CONCAT('%', in_Keyword, '%') or 
-
-
-
     	Hash_Id LIKE CONCAT('%', in_Keyword, '%')
-
-
-
     	)
-
-
-
+    	and (in_StartDate is NULL OR create_at >= in_StartDate)
+		and (in_EndDate is NULL OR create_at <= in_EndDate)
     	AND (in_Status is NULL OR Status = in_Status)
-
-
-
 		and (in_UserId is null or User_Id = in_UserId)
-
-
-
 		and is_deleted = 0
-
-
-
     LIMIT in_endRecord
-
-
-
     OFFSET in_Offset;
-
-
-
 END $$
 DELIMITER ;
+
+-- SET @TotalRecord = 0;
+-- CALL `Proc_GetShortUrls`('', 0, 0, 10, 3, '2023-10-01 0:00:00', '2023-11-29 0:00:00', @TotalRecord);
+
+-- SELECT @TotalRecord AS TotalRecord;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;

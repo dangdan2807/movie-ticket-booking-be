@@ -1,50 +1,58 @@
+import { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Nav, NavItem, NavLink, Button } from 'reactstrap';
-import { HomeOutlined, LinkOutlined } from '@ant-design/icons';
+import {
+  HomeOutlined,
+  LinkOutlined,
+  PlusCircleOutlined,
+} from '@ant-design/icons';
+
 import './VerticalMenu.scss';
-import { useEffect, useState } from 'react';
+import { UserContext } from './../../context/userContext';
 
 export default function VerticalMenu() {
   const navigate = useNavigate();
 
-  const [currentNavItem, setCurrentNavItem] = useState('home');
+  const { activeItemVerticalMenu, setActiveItemVerticalMenu } =
+    useContext(UserContext);
 
   useEffect(() => {
     const currentPathName = window.location.pathname;
     switch (currentPathName) {
       case '/dashboard':
-        setCurrentNavItem('home');
+        setActiveItemVerticalMenu('home');
         break;
       case '/links':
-        setCurrentNavItem('links');
+        setActiveItemVerticalMenu('links');
         break;
       case '/settings':
-        setCurrentNavItem('settings');
+        setActiveItemVerticalMenu('settings');
         break;
       default:
-        setCurrentNavItem('home');
+        setActiveItemVerticalMenu('home');
         break;
     }
   }, []);
 
   return (
     <>
-      {/* <div className="row"> */}
-        <Nav vertical className="col-2 ps-3 h-100 border-end dashboard__menu bg-white">
+      <div className="col-2">
+        <Nav vertical className="px-3 h-100 border-end dashboard__menu bg-white">
           <NavItem className="mt-2">
             <Button
-              className="w-100"
+              className="w-100 d-flex align-items-center justify-content-center"
               color="primary"
               onClick={() => {
                 navigate('/');
               }}
             >
+              <PlusCircleOutlined className="me-2" />
               Create new
             </Button>
           </NavItem>
           <NavItem
             className={
-              (currentNavItem === 'home' ? 'active' : '') +
+              (activeItemVerticalMenu === 'home' ? 'active' : '') +
               ' dashboard__nav-item'
             }
           >
@@ -58,7 +66,7 @@ export default function VerticalMenu() {
           </NavItem>
           <NavItem
             className={
-              (currentNavItem === 'links' ? 'active' : '') +
+              (activeItemVerticalMenu === 'links' ? 'active' : '') +
               ' dashboard__nav-item'
             }
           >
@@ -72,7 +80,7 @@ export default function VerticalMenu() {
           </NavItem>
           <NavItem
             className={
-              (currentNavItem === 'settings' ? 'active' : '') +
+              (activeItemVerticalMenu === 'settings' ? 'active' : '') +
               ' dashboard__nav-item'
             }
           >
@@ -85,7 +93,7 @@ export default function VerticalMenu() {
             </NavLink>
           </NavItem>
         </Nav>
-      {/* </div> */}
+      </div>
     </>
   );
 }

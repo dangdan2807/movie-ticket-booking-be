@@ -12,7 +12,13 @@ namespace ShortUrlBachEnd.Redis
         public RedisDb(IConfiguration configuration, Serilog.ILogger logger)
         {
             _configuration = configuration;
-            ConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(_configuration.GetConnectionString("Redis"));
+            var redisConfiguration = new ConfigurationOptions
+            {
+                EndPoints = { _configuration.GetConnectionString("Redis") },
+                Password = _configuration.GetConnectionString("RedisPassword"),
+                AbortOnConnectFail = false,
+            };
+            ConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(redisConfiguration);
             _database = multiplexer.GetDatabase();
             _logger = logger;
         }

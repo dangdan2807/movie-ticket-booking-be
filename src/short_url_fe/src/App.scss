@@ -35,5 +35,5 @@ code {
 }
 
 #root > .bg-body-tertiary {
-  height: 100vh;
+  height: calc(100% + 13rem);
 }

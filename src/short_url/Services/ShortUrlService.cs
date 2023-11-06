@@ -84,6 +84,7 @@ namespace MovieTicketBookingBe.Services
             var shortUrl = new ShortUrl
             {
                 LongUrl = CreateShortUrlVM.longUrl,
+                Title = CreateShortUrlVM.title,
                 ShortUrlString = string.IsNullOrEmpty(CreateShortUrlVM.shortUrl) ? shortUrlstring : CreateShortUrlVM.shortUrl,
                 HashId = hashId,
                 UserId = userId,
@@ -98,6 +99,7 @@ namespace MovieTicketBookingBe.Services
             return new ShortUrlDTO
             {
                 hashId = saveShortUrl.HashId,
+                title = saveShortUrl.Title,
                 longUrl = saveShortUrl.LongUrl,
                 shortUrl = saveShortUrl.ShortUrlString,
                 status = saveShortUrl.Status,
@@ -108,7 +110,7 @@ namespace MovieTicketBookingBe.Services
             };
         }
 
-        public async Task<GetShortUrlsDTO> GetShortUrlsForAdmin(PaginationVM paginationVM, string? keyword = "", bool? status = true)
+        public async Task<GetShortUrlsDTO> GetShortUrlsForAdmin(PaginationVM paginationVM, string? keyword = "", DateTime? startDate = null, DateTime? endDate = null, bool? status = true)
         {
             if (paginationVM.currentPage <= 0 || paginationVM.pageSize <= 0)
             {
@@ -118,7 +120,7 @@ namespace MovieTicketBookingBe.Services
             {
                 throw new Exception("Sort is invalid");
             }
-            return await _shortUrlRepository.GetShortUrlsForAdmin(paginationVM, keyword, status);
+            return await _shortUrlRepository.GetShortUrlsForAdmin(paginationVM, keyword, startDate, endDate, status);
         }
 
         public async Task<ShortUrlDTO> GetShortUrlByHashIdAndUserId(string hashId, int userId, List<string> roles)
@@ -165,6 +167,7 @@ namespace MovieTicketBookingBe.Services
             return new ShortUrlDTO
             {
                 hashId = shortUrl.HashId,
+                title = shortUrl.Title,
                 longUrl = shortUrl.LongUrl,
                 shortUrl = shortUrl.ShortUrlString,
                 status = shortUrl.Status,
@@ -191,6 +194,7 @@ namespace MovieTicketBookingBe.Services
             return new ShortUrlDTO
             {
                 hashId = shortUrlObj.HashId,
+                title = shortUrlObj.Title,
                 longUrl = shortUrlObj.LongUrl,
                 shortUrl = shortUrlObj.ShortUrlString,
                 status = shortUrlObj.Status,
@@ -201,7 +205,7 @@ namespace MovieTicketBookingBe.Services
             };
         }
 
-        public async Task<GetShortUrlsDTO> GetShortUrlsForUserId(int userId, PaginationVM paginationVM, string? keyword = "", bool? status = true)
+        public async Task<GetShortUrlsDTO> GetShortUrlsForUserId(int userId, PaginationVM paginationVM, string? keyword = "", DateTime? startDate = null, DateTime? endDate = null, bool? status = true)
         {
             if (paginationVM.currentPage <= 0 || paginationVM.pageSize <= 0)
             {
@@ -215,7 +219,7 @@ namespace MovieTicketBookingBe.Services
             {
                 throw new Exception("userId is invalid");
             }
-            return await _shortUrlRepository.GetShortUrlsByUserId(userId, paginationVM, keyword, status);
+            return await _shortUrlRepository.GetShortUrlsByUserId(userId, paginationVM, keyword, startDate, endDate, status);
         }
 
         public async Task<ShortUrlDTO> UpdateShortUrlByShortLink(string shortLink, int userId, List<string> roles, UpdateShortUrlVM updateShortUrlVM)
@@ -267,8 +271,9 @@ namespace MovieTicketBookingBe.Services
             }
 
             shortUrl.LongUrl = updateShortUrlVM.longUrl;
+            shortUrl.Title = updateShortUrlVM.title;
             shortUrl.ShortUrlString = updateShortUrlVM.shortUrl;
-            shortUrl.Status = updateShortUrlVM.status.HasValue;
+            shortUrl.Status = updateShortUrlVM.status.Value;
 
             var updateShortUrl = await _shortUrlRepository.UpdateShortUrlByShortLink(shortUrl);
             if (updateShortUrl == null)
@@ -279,6 +284,7 @@ namespace MovieTicketBookingBe.Services
             return new ShortUrlDTO
             {
                 hashId = updateShortUrl.HashId,
+                title = updateShortUrl.Title,
                 longUrl = updateShortUrl.LongUrl,
                 shortUrl = updateShortUrl.ShortUrlString,
                 status = updateShortUrl.Status,
@@ -312,6 +318,7 @@ namespace MovieTicketBookingBe.Services
             return new ShortUrlDTO
             {
                 hashId = updateShortUrl.HashId,
+                title = updateShortUrl.Title,
                 longUrl = updateShortUrl.LongUrl,
                 shortUrl = updateShortUrl.ShortUrlString,
                 status = updateShortUrl.Status,
@@ -321,7 +328,6 @@ namespace MovieTicketBookingBe.Services
                 updateAt = updateShortUrl.UpdateAt,
             };
         }
-
 
         public async Task<ShortUrlDTO> DeleteShortUrlByShortLink(string shortLink, int userId, List<string> roles)
         {
@@ -380,6 +386,7 @@ namespace MovieTicketBookingBe.Services
             return new ShortUrlDTO
             {
                 hashId = deleteShortUrl.HashId,
+                title = deleteShortUrl.Title,
                 longUrl = deleteShortUrl.LongUrl,
                 shortUrl = deleteShortUrl.ShortUrlString,
                 status = deleteShortUrl.Status,

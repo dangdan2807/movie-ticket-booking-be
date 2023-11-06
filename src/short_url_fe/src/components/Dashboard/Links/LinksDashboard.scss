@@ -1,0 +1,15 @@
+.links-dashboard {
+  &__filter-bar {
+    &__input-date {
+      width: 26rem;
+    }
+    &__btn-show {
+      width: 5rem;
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: #f8f9fa !important;
+      }
+    }
+  }
+}

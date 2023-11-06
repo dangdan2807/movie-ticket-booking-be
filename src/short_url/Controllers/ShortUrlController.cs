@@ -4,6 +4,7 @@ using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.Models.Response;
 using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.ViewModels;
+using System.Collections.Generic;
 using System.Net;
 using System.Security.Claims;
 
@@ -54,7 +55,8 @@ namespace MovieTicketBookingBe.Controllers
 
         [HttpGet]
         [Authorize(Roles = "ADMIN, MOD, VIP, MEMBER")]
-        public async Task<IActionResult> GetShortUrlsForAdmin([FromQuery] PaginationVM paginationVM, string? keyword = "", bool? status = true)
+        public async Task<IActionResult> GetShortUrls([FromQuery] PaginationVM paginationVM, string? keyword = "",
+            DateTime? startDate = null, DateTime? endDate = null, bool? status = true)
         {
             try
             {
@@ -78,14 +80,14 @@ namespace MovieTicketBookingBe.Controllers
                 var shortUrls = new GetShortUrlsDTO();
                 if (role.Equals("ADMIN") || role.Equals("MOD"))
                 {
-                    shortUrls = await _shortUrlService.GetShortUrlsForAdmin(paginationVM, keyword, status);
+                    shortUrls = await _shortUrlService.GetShortUrlsForAdmin(paginationVM, keyword, startDate, endDate, status);
                 }
                 else
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) + "";
                     int userIdInt = int.Parse(userId);
 
-                    shortUrls = await _shortUrlService.GetShortUrlsForUserId(userIdInt, paginationVM, keyword, status);
+                    shortUrls = await _shortUrlService.GetShortUrlsForUserId(userIdInt, paginationVM, keyword, startDate, endDate, status);
                 }
 
                 return Ok(new SuccessResponse(

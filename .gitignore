@@ -2,5 +2,5 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/seq-data
-/**/ShortUrlFrontEnd_C/**
+**/seq-data
+**/redis-data

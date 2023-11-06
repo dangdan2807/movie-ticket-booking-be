@@ -3,6 +3,7 @@
     public class ShortUrlDTO
     {
         public string hashId { get; set; }
+        public string title { get; set; }
         public string longUrl { get; set; }
         public string shortUrl { get; set; }
         public DateTime? createdAt { get; set; }

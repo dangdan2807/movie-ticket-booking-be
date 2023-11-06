@@ -6,6 +6,7 @@ import {
   EditOutlined,
   DeleteOutlined,
   EyeInvisibleOutlined,
+  EyeOutlined,
   CalendarOutlined,
   BarChartOutlined,
 } from '@ant-design/icons';
@@ -16,6 +17,12 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+
+import {
+  deleteShortUrlByShortLink,
+  hiddenShortUrl,
+} from '../../../services/ShortLinkService';
 
 export default function ShortLinkItem(props) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -26,17 +33,17 @@ export default function ShortLinkItem(props) {
   return (
     <>
       <div className="bg-white mt-2 d-flex justify-content-around align-items-start py-2 rounded-2">
-        <div className="form-check">
+        {/* <div className="form-check">
           <input className="form-check-input ms-1 me-4" type="checkbox" />
-        </div>
-        <div className="w-100">
+        </div> */}
+        <div className="w-100 ms-3">
           <h5 className="fw-bolder">
-            <Link
+            {/* <Link
               className="text-decoration-none text-black"
-              to={shortLink?.shortUrl ? '' + shortLink?.shortUrl : 'null'}
+              to={shortLink?.title ? '' + shortLink?.title : shortLink?.shortUrl}
             >
-              {shortLink?.shortUrl ? shortLink?.shortUrl : 'null'}
-            </Link>
+          </Link> */}
+            {shortLink?.title ? shortLink?.title : shortLink?.shortUrl}
           </h5>
           <p className="my-1">
             <Link
@@ -63,11 +70,21 @@ export default function ShortLinkItem(props) {
               <BarChartOutlined className="me-2" />
               {shortLink?.clickCount ? shortLink?.clickCount : 0} engagements
             </span>
-            <span className="short-link-item__text d-flex align-items-center">
+            <span className="short-link-item__text me-3 d-flex align-items-center">
               <CalendarOutlined className="me-2" />
               {shortLink?.createdAt
                 ? ' ' + dayjs(shortLink?.createdAt).format('DD/MM/YYYY')
                 : ' null'}
+            </span>
+
+            <span
+              className={
+                'short-link-item__text d-flex align-items-center ' +
+                (shortLink?.status === false ? '' : 'd-none')
+              }
+            >
+              <EyeInvisibleOutlined className="me-2" />
+              Hidden
             </span>
           </div>
         </div>
@@ -103,13 +120,59 @@ export default function ShortLinkItem(props) {
                   More
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem className="short-link-item__dropdown">
-                    <div className="d-flex align-items-center">
+                  <DropdownItem
+                    className="short-link-item__dropdown"
+                    onClick={async () => {
+                      shortLink.status = !shortLink?.status;
+                      const res = await hiddenShortUrl(shortLink);
+                      if (res && res.data) {
+                        toast.success(
+                          `${
+                            shortLink.status === true ? 'Hidden' : 'UnHidden'
+                          } successfully`,
+                        );
+                      } else {
+                        shortLink.status = !shortLink?.status;
+                        toast.error(
+                          `${
+                            shortLink.status === true ? 'Hidden' : 'UnHidden'
+                          } failed`,
+                        );
+                      }
+                    }}
+                  >
+                    <div
+                      className={
+                        'd-flex align-items-center ' +
+                        (shortLink?.status === true ? '' : 'd-none')
+                      }
+                    >
                       <EyeInvisibleOutlined className="me-2" />
                       Hidden
                     </div>
+                    <div
+                      className={
+                        'd-flex align-items-center ' +
+                        (shortLink?.status === true ? 'd-none' : '')
+                      }
+                    >
+                      <EyeOutlined className="me-2" />
+                      UnHidden
+                    </div>
                   </DropdownItem>
-                  <DropdownItem className="short-link-item__dropdown">
+                  <DropdownItem
+                    className="short-link-item__dropdown"
+                    onClick={async () => {
+                      const res = await deleteShortUrlByShortLink(
+                        shortLink?.shortUrl,
+                      );
+                      if (res && res.data) {
+                        toast.success(`Delete successfully`);
+                      } else {
+                        toast.error(`Delete failed`);
+                      }
+                    }}
+                  >
                     <div className="d-flex align-items-center text-danger">
                       <DeleteOutlined className="me-2" />
                       Delete

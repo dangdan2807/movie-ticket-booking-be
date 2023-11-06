@@ -5,6 +5,7 @@ const UserContext = React.createContext({ name: '', phone: '', auth: false });
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState({ name: '', phone: '', auth: false });
   const [currentPage, setCurrentPage] = useState('home');
+  const [activeItemVerticalMenu, setActiveItemVerticalMenu] = useState('home');
 
   const loginContext = (name, phone) => {
     setUser({
@@ -24,7 +25,17 @@ const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, currentPage, setCurrentPage, loginContext, logout }}>
+    <UserContext.Provider
+      value={{
+        user,
+        currentPage,
+        setCurrentPage,
+        activeItemVerticalMenu,
+        setActiveItemVerticalMenu,
+        loginContext,
+        logout,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

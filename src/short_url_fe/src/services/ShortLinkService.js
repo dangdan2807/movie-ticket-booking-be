@@ -1,4 +1,5 @@
 import axios from './CustomAxios';
+import dayjs from 'dayjs';
 import { getTokenFromLocalStorage } from './../lib/common';
 
 export const getShortUrlByShortLink = (pathname) => {
@@ -10,6 +11,7 @@ export const createShortUrl = (longUrl, shortUrl) => {
   return axios.post(
     '/v1/short-url',
     {
+      title: shortUrl,
       longUrl,
       shortUrl,
     },
@@ -22,7 +24,14 @@ export const createShortUrl = (longUrl, shortUrl) => {
   );
 };
 
-export const getShortLinks = (currentPage = 1, pageSize = 10, sort = 'ASC') => {
+export const getShortLinks = (
+  startDate = dayjs().startOf('day'),
+  endDate = dayjs().add(1, 'day').endOf('day'),
+  status = true,
+  currentPage = 1,
+  pageSize = 10,
+  sort = 'ASC',
+) => {
   const token = getTokenFromLocalStorage();
   return axios.get(`/v1/short-url`, {
     headers: {
@@ -33,6 +42,9 @@ export const getShortLinks = (currentPage = 1, pageSize = 10, sort = 'ASC') => {
       currentPage,
       pageSize,
       sort,
+      startDate: startDate.format('YYYY-MM-DDTHH:mm:ss'),
+      endDate: endDate.format('YYYY-MM-DDTHH:mm:ss'),
+      status,
     },
   });
 };
@@ -47,4 +59,33 @@ export const updateClickCount = (shortLink) => {
       },
     },
   );
+};
+
+export const hiddenShortUrl = (shortLink) => {
+  const token = getTokenFromLocalStorage();
+  return axios.put(
+    `/v1/short-url/short-link/${shortLink?.shortUrl}`,
+    {
+      title: shortLink?.title,
+      longUrl: shortLink?.longUrl,
+      shortUrl: shortLink?.shortUrl,
+      status: shortLink?.status,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+};
+
+export const deleteShortUrlByShortLink = (shortLink) => {
+  const token = getTokenFromLocalStorage();
+  return axios.delete(`/v1/short-url/short-link/${shortLink}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };

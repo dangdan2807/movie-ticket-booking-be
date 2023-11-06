@@ -32,6 +32,10 @@ namespace MovieTicketBookingBe.Repositories
             {
                 throw new ArgumentNullException("short url obj is required");
             }
+            if (string.IsNullOrEmpty(shortUrl.Title.Trim()))
+            {
+                throw new ArgumentNullException("title is required");
+            }
             if (string.IsNullOrEmpty(shortUrl.LongUrl.Trim()))
             {
                 throw new ArgumentNullException("long url is required");
@@ -103,6 +107,7 @@ namespace MovieTicketBookingBe.Repositories
                         shortUrl = new ShortUrl
                         {
                             HashId = reader.GetString("hash_id"),
+                            Title = reader.GetString("Title"),
                             LongUrl = reader.GetString("long_url"),
                             ShortUrlString = reader.GetString("short_url"),
                             Status = reader.GetBoolean("status"),
@@ -145,6 +150,7 @@ namespace MovieTicketBookingBe.Repositories
                         shortUrlObj = new ShortUrl
                         {
                             HashId = reader.GetString("hash_id"),
+                            Title = reader.GetString("Title"),
                             LongUrl = reader.GetString("long_url"),
                             ShortUrlString = reader.GetString("short_url"),
                             Status = reader.GetBoolean("status"),
@@ -186,6 +192,7 @@ namespace MovieTicketBookingBe.Repositories
                         shortUrlObj = new ShortUrl
                         {
                             HashId = reader.GetString("hash_id"),
+                            Title = reader.GetString("Title"),
                             LongUrl = reader.GetString("long_url"),
                             ShortUrlString = reader.GetString("short_url"),
                             Status = reader.GetBoolean("status"),
@@ -206,14 +213,26 @@ namespace MovieTicketBookingBe.Repositories
             return shortUrlObj;
         }
 
-        public async Task<GetShortUrlsDTO> GetShortUrlsByUserId(int userId, PaginationVM paginationVM, string? keyword = "", bool? status = true)
+        public async Task<GetShortUrlsDTO> GetShortUrlsByUserId(int userId, PaginationVM paginationVM, string? keyword = "", DateTime? startDate = null, DateTime? endDate = null, bool? status = true)
         {
+            int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
+            int limit = paginationVM.pageSize;
+
+            DateTime currentDate = DateTime.Now;
+            DateTime sDate = currentDate.Date;
+            DateTime eDate = currentDate.Date.AddDays(1);
+            if (startDate.HasValue)
+            {
+                sDate = startDate.Value.Date;
+            }
+            if (endDate.HasValue)
+            {
+                eDate = endDate.Value.Date;
+            }
+
             List<ShortUrlDTO> shortUrls = new List<ShortUrlDTO>();
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
-                int limit = paginationVM.pageSize;
-
                 string procName = "Proc_GetShortUrls";
                 MySqlCommand cmd = new MySqlCommand(procName, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -222,6 +241,8 @@ namespace MovieTicketBookingBe.Repositories
                 cmd.Parameters.AddWithValue("in_Offset", skip);
                 cmd.Parameters.AddWithValue("in_endRecord", limit);
                 cmd.Parameters.AddWithValue("in_UserId", userId);
+                cmd.Parameters.AddWithValue("in_StartDate", sDate);
+                cmd.Parameters.AddWithValue("in_EndDate", eDate);
                 cmd.Parameters.Add("out_TotalRecord", MySqlDbType.Int32);
                 cmd.Parameters["out_TotalRecord"].Direction = ParameterDirection.Output;
                 connection.Open();
@@ -232,6 +253,7 @@ namespace MovieTicketBookingBe.Repositories
                         ShortUrlDTO shortUrl = new ShortUrlDTO
                         {
                             hashId = reader.GetString("hash_id"),
+                            title = reader.GetString("Title"),
                             longUrl = reader.GetString("long_url"),
                             shortUrl = reader.GetString("short_url"),
                             status = reader.GetBoolean("status"),
@@ -259,22 +281,36 @@ namespace MovieTicketBookingBe.Repositories
             }
         }
 
-        public async Task<GetShortUrlsDTO> GetShortUrlsForAdmin(PaginationVM paginationVM, string? keyword = "", bool? status = true)
+        public async Task<GetShortUrlsDTO> GetShortUrlsForAdmin(PaginationVM paginationVM, string? keyword = "", DateTime? startDate = null, DateTime? endDate = null, bool? status = true)
         {
+            int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
+            int limit = paginationVM.pageSize;
+
+            DateTime currentDate = DateTime.Now;
+            DateTime sDate = currentDate.Date;
+            DateTime eDate = currentDate.Date.AddDays(1);
+            if (startDate.HasValue)
+            {
+                sDate = startDate.Value.Date;
+            }
+            if (endDate.HasValue)
+            {
+                eDate = endDate.Value.Date;
+            }
+
             List<ShortUrlDTO> shortUrls = new List<ShortUrlDTO>();
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
-                int limit = paginationVM.pageSize;
-
                 string procName = "Proc_GetShortUrls";
                 MySqlCommand cmd = new MySqlCommand(procName, connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("in_Keyword", keyword);
-                cmd.Parameters.AddWithValue("in_Status", status);
+                cmd.Parameters.AddWithValue("in_Status", status == true ? 1 : 0);
                 cmd.Parameters.AddWithValue("in_Offset", skip);
                 cmd.Parameters.AddWithValue("in_endRecord", limit);
                 cmd.Parameters.AddWithValue("in_UserId", null);
+                cmd.Parameters.AddWithValue("in_StartDate", sDate);
+                cmd.Parameters.AddWithValue("in_EndDate", eDate);
                 cmd.Parameters.Add("out_TotalRecord", MySqlDbType.Int32);
                 cmd.Parameters["out_TotalRecord"].Direction = ParameterDirection.Output;
                 connection.Open();
@@ -285,6 +321,7 @@ namespace MovieTicketBookingBe.Repositories
                         ShortUrlDTO shortUrl = new ShortUrlDTO
                         {
                             hashId = reader.GetString("hash_id"),
+                            title = reader.GetString("Title"),
                             longUrl = reader.GetString("long_url"),
                             shortUrl = reader.GetString("short_url"),
                             status = reader.GetBoolean("status"),
@@ -317,6 +354,10 @@ namespace MovieTicketBookingBe.Repositories
             if (shortUrl == null)
             {
                 throw new ArgumentNullException("short url obj is required");
+            }
+            if (string.IsNullOrEmpty(shortUrl.Title.Trim()))
+            {
+                throw new ArgumentNullException("title is required");
             }
             if (string.IsNullOrEmpty(shortUrl.LongUrl.Trim()))
             {

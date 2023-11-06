@@ -5,6 +5,7 @@ import ComingSoon from './components/ComingSoon/ComingSoon';
 import HomeDashboard from './components/Dashboard/Home/HomeDashboard';
 import LinksDashboard from './components/Dashboard/Links/LinksDashboard';
 import SettingsDashboard from './components/Dashboard/Settings/SettingsDashboard';
+// import LinkItemDetail from './components/Dashboard/LinkItemDetail/LinkItemDetail';
 import { LayoutDashboard } from './components/Dashboard/LayoutDashboard';
 
 const AppRoutes = [
@@ -32,6 +33,14 @@ const AppRoutes = [
       </LayoutDashboard>
     ),
   },
+  // {
+  //   path: '/links/:slug',
+  //   element: (
+  //     <LayoutDashboard>
+  //       <LinkItemDetail />
+  //     </LayoutDashboard>
+  //   ),
+  // },
   {
     path: '/links',
     element: (

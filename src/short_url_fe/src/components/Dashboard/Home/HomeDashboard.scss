@@ -1,13 +1,31 @@
-.dashboard {
-  &__menu {
-    height: 89.5vh !important;
-  }
-  &__nav-item {
-    &:hover {
-      background-color: #f4f6fa;
-      border-radius: 4px;
+.home-dashboard {
+  &__card {
+    &-title {
+      font-size: 1.1rem;
     }
-    &__link {
+    &-child {
+      height: 8rem;
+      & .card-body {
+        height: 8rem;
+      }
+    }
+    &-btn {
+      font-size: 0.85rem;
+    }
+  }
+  &__img {
+    max-width: 9.375rem !important;
+    max-height: 5.3rem !important;
+  }
+  &__report {
+    &__text {
+      font-size: 0.9rem;
+    }
+    &__card {
+      background-color: #cdd9f9 !important;
+      &__img {
+        width: 17rem;
+      }
     }
   }
 }

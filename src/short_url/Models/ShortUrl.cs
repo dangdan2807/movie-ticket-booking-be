@@ -13,6 +13,11 @@ namespace MovieTicketBookingBe.Models
         public string HashId { get; set; } = null!;
 
         [Required]
+        [Column("title")]
+        [StringLength(256)]
+        public string Title { get; set; } = null!;
+
+        [Required]
         [Column("long_url")]
         [StringLength(256)]
         public string LongUrl { get; set; } = null!;

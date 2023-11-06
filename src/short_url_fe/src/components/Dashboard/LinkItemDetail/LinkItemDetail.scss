@@ -1,0 +1,12 @@
+.link-item-detail {
+  &__link {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+    & a.text-black {
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
