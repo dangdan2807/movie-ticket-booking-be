@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Nav, NavItem, NavLink, Button } from 'reactstrap';
 import {
@@ -9,12 +9,14 @@ import {
 
 import './VerticalMenu.scss';
 import { UserContext } from './../../context/userContext';
+import ModalAddNew from '../Modals/ModalAddNew';
 
 export default function VerticalMenu() {
   const navigate = useNavigate();
 
   const { activeItemVerticalMenu, setActiveItemVerticalMenu } =
     useContext(UserContext);
+  const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
 
   useEffect(() => {
     const currentPathName = window.location.pathname;
@@ -37,18 +39,25 @@ export default function VerticalMenu() {
   return (
     <>
       <div className="col-2">
-        <Nav vertical className="px-3 h-100 border-end dashboard__menu bg-white">
+        <Nav
+          vertical
+          className="px-3 h-100 border-end dashboard__menu bg-white"
+        >
           <NavItem className="mt-2">
             <Button
               className="w-100 d-flex align-items-center justify-content-center"
               color="primary"
               onClick={() => {
-                navigate('/');
+                setIsShowModalAddNew(true);
               }}
             >
               <PlusCircleOutlined className="me-2" />
               Create new
             </Button>
+            <ModalAddNew
+              show={isShowModalAddNew}
+              handleClose={() => setIsShowModalAddNew(false)}
+            />
           </NavItem>
           <NavItem
             className={

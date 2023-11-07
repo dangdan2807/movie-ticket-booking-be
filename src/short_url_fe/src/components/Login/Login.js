@@ -7,6 +7,7 @@ import {
   LoadingOutlined,
 } from '@ant-design/icons';
 import { toast } from 'react-toastify';
+
 import { UserContext } from './../../context/userContext';
 import { storeTokenInLocalStorage } from './../../lib/common';
 import { getProfile, login } from './../../services/UserService';

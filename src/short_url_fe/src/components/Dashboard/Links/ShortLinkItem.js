@@ -1,4 +1,3 @@
-import './ShortLinkItem.scss';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -19,30 +18,24 @@ import {
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 
-import {
-  deleteShortUrlByShortLink,
-  hiddenShortUrl,
-} from '../../../services/ShortLinkService';
+import './ShortLinkItem.scss';
+import { hiddenShortUrl } from '../../../services/ShortLinkService';
+import ModalConfirmDelete from '../../Modals/ModalConfirmDelete';
 
 export default function ShortLinkItem(props) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { shortLink, reloadShortUrls } = props;
+  const [isShowModalConfirmDelete, setIsShowModalConfirmDelete] =
+    useState(false);
+  const [selectItemDelete, setSelectItemDelete] = useState({});
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const { shortLink } = props;
   return (
     <>
       <div className="bg-white mt-2 d-flex justify-content-around align-items-start py-2 rounded-2">
-        {/* <div className="form-check">
-          <input className="form-check-input ms-1 me-4" type="checkbox" />
-        </div> */}
         <div className="w-100 ms-3">
           <h5 className="fw-bolder">
-            {/* <Link
-              className="text-decoration-none text-black"
-              to={shortLink?.title ? '' + shortLink?.title : shortLink?.shortUrl}
-            >
-          </Link> */}
             {shortLink?.title ? shortLink?.title : shortLink?.shortUrl}
           </h5>
           <p className="my-1">
@@ -163,14 +156,8 @@ export default function ShortLinkItem(props) {
                   <DropdownItem
                     className="short-link-item__dropdown"
                     onClick={async () => {
-                      const res = await deleteShortUrlByShortLink(
-                        shortLink?.shortUrl,
-                      );
-                      if (res && res.data) {
-                        toast.success(`Delete successfully`);
-                      } else {
-                        toast.error(`Delete failed`);
-                      }
+                      setIsShowModalConfirmDelete(true);
+                      setSelectItemDelete(shortLink);
                     }}
                   >
                     <div className="d-flex align-items-center text-danger">
@@ -184,6 +171,12 @@ export default function ShortLinkItem(props) {
           </div>
         </div>
       </div>
+      <ModalConfirmDelete
+        show={isShowModalConfirmDelete}
+        handleClose={() => setIsShowModalConfirmDelete(false)}
+        shortLink={selectItemDelete}
+        reloadShortUrls={() => reloadShortUrls()}
+      />
     </>
   );
 }

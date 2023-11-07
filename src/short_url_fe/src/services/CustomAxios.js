@@ -3,14 +3,14 @@ import axios from 'axios';
 const instance = axios.create({
   baseURL: process.env.REACT_APP_URL_BACKEND,
   headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-  }
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+  },
 });
 
 instance.interceptors.response.use(
   function (res) {
-    return res.data;
+    return res.data ? res.data : { statusCode: res.status };
   },
   function (error) {
     return error;

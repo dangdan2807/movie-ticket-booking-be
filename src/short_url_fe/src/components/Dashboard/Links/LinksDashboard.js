@@ -15,6 +15,7 @@ export default function LinksDashboard() {
     currentDate.add(1, 'day').endOf('day'),
   );
   const [filterShow, setFilterShow] = useState(true);
+  const [isUpdateShortUrls, setIsUpdateShortUrls] = useState(false);
 
   const handlerChangeFilterShow = (filterShow) => {
     setFilterShow(filterShow);
@@ -28,7 +29,7 @@ export default function LinksDashboard() {
       }
     }
     fetchDate();
-  }, [startDate, endDate, filterShow]);
+  }, [startDate, endDate, filterShow, isUpdateShortUrls]);
 
   return (
     <>
@@ -99,7 +100,12 @@ export default function LinksDashboard() {
         </div>
         {shortLinks.map((item) => (
           <div className="col-12" key={item.shortUrl}>
-            <ShortLinkItem shortLink={item} />
+            <ShortLinkItem
+              shortLink={item}
+              reloadShortUrls={() =>
+                setIsUpdateShortUrls(!isUpdateShortUrls)
+              }
+            />
           </div>
         ))}
       </div>

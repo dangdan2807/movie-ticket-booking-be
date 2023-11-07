@@ -184,6 +184,7 @@ export default function HomeDashboard() {
                       href="http://localhost:44481/dashboard"
                       role="button"
                       target="_blank"
+                      rel="noopener noreferrer"
                     >
                       View plans
                     </a>
@@ -192,6 +193,7 @@ export default function HomeDashboard() {
                       href="http://localhost:44481/dashboard"
                       role="button"
                       target="_blank"
+                      rel="noopener noreferrer"
                     >
                       Learn more
                     </a>
