@@ -5,8 +5,8 @@ import ComingSoon from './components/ComingSoon/ComingSoon';
 import HomeDashboard from './components/Dashboard/Home/HomeDashboard';
 import LinksDashboard from './components/Dashboard/Links/LinksDashboard';
 import SettingsDashboard from './components/Dashboard/Settings/SettingsDashboard';
-// import LinkItemDetail from './components/Dashboard/LinkItemDetail/LinkItemDetail';
 import { LayoutDashboard } from './components/Dashboard/LayoutDashboard';
+import CreateLink from './components/Dashboard/Links/Create/CreateLink';
 
 const AppRoutes = [
   {
@@ -33,19 +33,35 @@ const AppRoutes = [
       </LayoutDashboard>
     ),
   },
-  // {
-  //   path: '/links/:slug',
-  //   element: (
-  //     <LayoutDashboard>
-  //       <LinkItemDetail />
-  //     </LayoutDashboard>
-  //   ),
-  // },
   {
     path: '/links',
     element: (
       <LayoutDashboard>
         <LinksDashboard />
+      </LayoutDashboard>
+    ),
+  },
+  {
+    path: '/links/create',
+    element: (
+      <LayoutDashboard>
+        <CreateLink />
+      </LayoutDashboard>
+    ),
+  },
+  {
+    path: '/link-in-bio',
+    element: (
+      <LayoutDashboard>
+        <ComingSoon />
+      </LayoutDashboard>
+    ),
+  },
+  {
+    path: '/qr-codes',
+    element: (
+      <LayoutDashboard>
+        <ComingSoon />
       </LayoutDashboard>
     ),
   },

@@ -5,8 +5,7 @@ namespace MovieTicketBookingBe.ViewModels
 {
     public class CreateShortUrlVM
     {
-        [Required(ErrorMessage = "title is required")]
-        public string title { get; set; } = "";
+        public string? title { get; set; } = "";
 
         [Required(ErrorMessage = "long url is required")]
         [Url(ErrorMessage = "long url is invalid")]

@@ -6,12 +6,12 @@ export const getShortUrlByShortLink = (pathname) => {
   return axios.get(`/v1/short-url/short-link${pathname}`);
 };
 
-export const createShortUrl = (longUrl, shortUrl) => {
+export const createShortUrl = (longUrl, shortUrl, title) => {
   const token = getTokenFromLocalStorage();
   return axios.post(
     '/v1/short-url',
     {
-      title: shortUrl,
+      title: title ?? shortUrl,
       longUrl,
       shortUrl,
     },
@@ -45,6 +45,16 @@ export const getShortLinks = (
       startDate: startDate.format('YYYY-MM-DDTHH:mm:ss'),
       endDate: endDate.format('YYYY-MM-DDTHH:mm:ss'),
       status,
+    },
+  });
+};
+
+export const countShortLinks = () => {
+  const token = getTokenFromLocalStorage();
+  return axios.get(`/v1/short-url/count`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   });
 };

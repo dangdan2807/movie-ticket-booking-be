@@ -4,9 +4,10 @@ using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.Models.Response;
 using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.ViewModels;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.Net;
 using System.Security.Claims;
+using System.Text.Json.Nodes;
 
 namespace MovieTicketBookingBe.Controllers
 {
@@ -147,6 +148,34 @@ namespace MovieTicketBookingBe.Controllers
                     HttpStatusCode.OK,
                     "Get short url successfully",
                     shortUrlDTO
+                ));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse(
+                    HttpStatusCode.BadRequest,
+                    ex.Message
+                ));
+            }
+        }
+
+        [HttpGet("count")]
+        [Authorize(Roles = "ADMIN, MOD, VIP, MEMBER")]
+        public async Task<IActionResult> CountShortUrlsByUserId()
+        {
+            try
+            {
+                // get user id
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) + "";
+                int userIdInt = int.Parse(userId);
+
+                int numOfShortUrls = await _shortUrlService.CountShortUrlsByUserId(userIdInt);
+                var result = new { numOfShortUrls };
+
+                return Ok(new SuccessResponse(
+                    HttpStatusCode.OK,
+                    "Get num of short urls successfully",
+                    result
                 ));
             }
             catch (Exception ex)

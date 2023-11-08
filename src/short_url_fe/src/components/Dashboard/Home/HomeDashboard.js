@@ -1,10 +1,13 @@
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 import './HomeDashboard.scss';
+import { countShortLinks } from '../../../services/ShortLinkService';
 
 export default function HomeDashboard() {
   const navigate = useNavigate();
+  const [numOfShortUrls, setNumOfShortUrls] = useState(0);
 
   const handleGoToLinks = () => {
     navigate('/links');
@@ -33,6 +36,16 @@ export default function HomeDashboard() {
       funBtn: () => handleGoToComingSoon(),
     },
   ];
+
+  useEffect(() => {
+    async function FetchData() {
+      const res = await countShortLinks();
+      if (res && res.data) {
+        setNumOfShortUrls(res.data?.numOfShortUrls);
+      }
+    }
+    FetchData();
+  }, []);
 
   return (
     <>
@@ -80,43 +93,28 @@ export default function HomeDashboard() {
               <div className="d-flex align-items-center justify-content-between">
                 <p className="home-dashboard__report__text">Short links</p>
                 <p className="fw-bolder home-dashboard__report__text">
-                  2 of 10000 used
+                  {numOfShortUrls} of 10000 used
                 </p>
               </div>
               <div
                 className="progress"
                 role="progressbar"
                 aria-label="Basic example"
-                aria-valuenow="2"
+                aria-valuenow={numOfShortUrls}
                 aria-valuemin="0"
                 aria-valuemax="10000"
               >
-                <div className="progress-bar" style={{ width: '0.02%' }}></div>
+                <div
+                  className="progress-bar"
+                  style={{ width: `${numOfShortUrls / 100}%` }}
+                ></div>
               </div>
             </div>
             <div className="my-4">
               <div className="d-flex align-items-center justify-content-between">
                 <p className="home-dashboard__report__text">QR codes</p>
                 <p className="fw-bolder home-dashboard__report__text">
-                  1 of 2 used
-                </p>
-              </div>
-              <div
-                className="progress"
-                role="progressbar"
-                aria-label="Basic example"
-                aria-valuenow="1"
-                aria-valuemin="0"
-                aria-valuemax="2"
-              >
-                <div className="progress-bar" style={{ width: '50%' }}></div>
-              </div>
-            </div>
-            <div className="my-4">
-              <div className="d-flex align-items-center justify-content-between">
-                <p className="home-dashboard__report__text">Link-in-bio</p>
-                <p className="fw-bolder home-dashboard__report__text">
-                  0 of 1 used
+                  0 of 0 used
                 </p>
               </div>
               <div
@@ -125,7 +123,25 @@ export default function HomeDashboard() {
                 aria-label="Basic example"
                 aria-valuenow="0"
                 aria-valuemin="0"
-                aria-valuemax="1"
+                aria-valuemax="0"
+              >
+                <div className="progress-bar" style={{ width: '0%' }}></div>
+              </div>
+            </div>
+            <div className="my-4">
+              <div className="d-flex align-items-center justify-content-between">
+                <p className="home-dashboard__report__text">Link-in-bio</p>
+                <p className="fw-bolder home-dashboard__report__text">
+                  0 of 0 used
+                </p>
+              </div>
+              <div
+                className="progress"
+                role="progressbar"
+                aria-label="Basic example"
+                aria-valuenow="0"
+                aria-valuemin="0"
+                aria-valuemax="0"
               >
                 <div className="progress-bar" style={{ width: '0%' }}></div>
               </div>

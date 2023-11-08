@@ -26,6 +26,27 @@ namespace MovieTicketBookingBe.Repositories
             _connectionString = _configuration.GetConnectionString("DefaultConnection");
         }
 
+        public Task<int> CountShortUrlsByUserId(int userId)
+        {
+            int numOfShortUrls = 0;
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
+            {
+                string queryString = "select count(*) as num_of_short_urls from short_urls where is_deleted = 0 and user_id = @userId";
+                MySqlCommand cmd = new MySqlCommand(queryString, connection);
+                cmd.Parameters.AddWithValue("@userId", userId);
+                connection.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        numOfShortUrls = reader.GetInt16("num_of_short_urls");
+                    }
+                }
+                connection.Close();
+            }
+            return Task.FromResult(numOfShortUrls);
+        }
+
         public async Task<ShortUrl> CreateShortUrl(ShortUrl shortUrl)
         {
             if (shortUrl == null)

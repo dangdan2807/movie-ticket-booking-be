@@ -6,6 +6,7 @@ namespace MovieTicketBookingBe.Services
     public interface IShortUrlService
     {
         Task<ShortUrlDTO> CreateShortUrl(int userId, CreateShortUrlVM CreateShortUrlVM);
+        Task<int> CountShortUrlsByUserId(int userId);
         Task<ShortUrlDTO> UpdateShortUrlByShortLink(string shortLink, int userIdInt, List<string> roles, UpdateShortUrlVM updateShortUrlVM);
         Task<ShortUrlDTO> UpdateClickCountByShortLink(string shortLink);
         Task<GetShortUrlsDTO> GetShortUrlsForAdmin(PaginationVM paginationVM, string? keyword = "", DateTime? startDate = null, DateTime? endDate = null, bool? status = true);

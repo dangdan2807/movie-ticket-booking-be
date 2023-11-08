@@ -64,6 +64,7 @@ namespace MovieTicketBookingBe.Services
             {
                 throw new Exception("long url is required");
             }
+
             var shortUrlByLongUrl = await _shortUrlRepository.GetShortUrlByLongLinkAndUserId(CreateShortUrlVM.longUrl, userId);
             if (shortUrlByLongUrl != null)
             {
@@ -77,6 +78,10 @@ namespace MovieTicketBookingBe.Services
             {
                 shortUrlstring = ShortId.Generate();
                 shortUrlObj = await _shortUrlRepository.GetShortUrlByShortLink(shortUrlstring);
+            }
+            if (string.IsNullOrEmpty(CreateShortUrlVM.title))
+            {
+                CreateShortUrlVM.title = shortUrlstring;
             }
 
             var hashId = createHashId();
@@ -395,6 +400,22 @@ namespace MovieTicketBookingBe.Services
                 createdAt = deleteShortUrl.CreatedAt,
                 updateAt = deleteShortUrl.UpdateAt,
             };
+        }
+
+        public async Task<int> CountShortUrlsByUserId(int userId)
+        {
+            if (userId <= 0)
+            {
+                throw new Exception("userId is invalid");
+            }
+
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            return await _shortUrlRepository.CountShortUrlsByUserId(userId);
         }
     }
 }
