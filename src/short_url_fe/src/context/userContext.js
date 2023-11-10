@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 
-const UserContext = React.createContext({ name: '', phone: '', auth: false });
+const UserContext = React.createContext({ name: '', email: '', auth: false });
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({ name: '', phone: '', auth: false });
+  const [user, setUser] = useState({ name: '', email: '', auth: false });
   const [currentPage, setCurrentPage] = useState('home');
   const [activeItemVerticalMenu, setActiveItemVerticalMenu] = useState('home');
 
-  const loginContext = (name, phone) => {
+  const loginContext = (name, email) => {
     setUser({
       name,
-      phone,
+      email,
       auth: true,
     });
   };
@@ -19,7 +19,7 @@ const UserProvider = ({ children }) => {
     localStorage.removeItem('token');
     setUser({
       name: '',
-      phone: '',
+      email: '',
       auth: false,
     });
   };

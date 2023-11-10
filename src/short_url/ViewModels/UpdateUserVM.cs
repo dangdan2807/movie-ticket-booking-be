@@ -7,14 +7,14 @@ namespace MovieTicketBookingBe.ViewModels
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Fullname must be between 3 - 100 characters")]
         public string fullName { get; set; } = "";
 
-        [StringLength(12, MinimumLength = 10, ErrorMessage = "Phone must be 10 - 12 characters")]
-        [RegularExpression(@"^0[3|5|7|8|9]\d{8,10}$", ErrorMessage = "Phone must be numeric")]
-        public string phone { get; set; } = "";
+        [Required(ErrorMessage = "Email is required")]
+        [StringLength(255, MinimumLength = 6, ErrorMessage = "Email must be between 6 and 255 characters")]
+        [RegularExpression(@"^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$", ErrorMessage = "invalid email")]
+        public string email { get; set; } = "";
 
         [StringLength(255, ErrorMessage = "Address maximum 255 characters")]
         public string address { get; set; } = "";
 
-        //[RegularExpression("true|false", ErrorMessage = "Status must be boolean")]
         public bool status { get; set; } = true;
 
         [Required(ErrorMessage = "RoleIds is required")]

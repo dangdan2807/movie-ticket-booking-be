@@ -5,6 +5,8 @@ import {
   GoogleOutlined,
   FacebookOutlined,
   LoadingOutlined,
+  EyeOutlined,
+  EyeInvisibleOutlined,
 } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 
@@ -18,7 +20,8 @@ export default function Login() {
   const { loginContext, logout, user, setCurrentPage } =
     useContext(UserContext);
 
-  const [phone, setPhone] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loadingAPI, setLoadingAPI] = useState(false);
 
@@ -47,13 +50,14 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!phone.trim() || phone.length === 0) {
-      toast.error('Phone is required');
+    if (!email.trim() || email.length === 0) {
+      toast.error('Email is required');
       return;
     }
-    var phonePattern = /^0\d{9}$/;
-    if (!phonePattern.test(phone)) {
-      toast.error('`Invalid` phone number');
+    var emailPattern =
+      /^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$/;
+    if (!emailPattern.test(email)) {
+      toast.error('Invalid email');
       return;
     }
     if (!password.trim() || password.length === 0) {
@@ -67,12 +71,12 @@ export default function Login() {
     }
 
     setLoadingAPI(true);
-    let res = await login(phone, password);
+    let res = await login(email, password);
     if (res && res.data) {
       storeTokenInLocalStorage(res.data.accessToken);
       let resProfile = await getProfile();
       if (res && res.data) {
-        loginContext(resProfile.data.fullName, resProfile.data.phone);
+        loginContext(resProfile.data.fullName, resProfile.data.email);
         navigate('/');
       } else {
         logout();
@@ -117,27 +121,48 @@ export default function Login() {
           onSubmit={async (e) => await handleSubmit(e)}
         >
           <FormGroup>
-            <Label for="usernameInput">Phone</Label>
+            <Label for="usernameInput">Email</Label>
             <Input
-              type="phone"
+              type="email"
               name="usernameInput"
               id="usernameInput"
-              placeholder="Your phone"
-              onChange={(e) => setPhone(`${e.target.value}`)}
+              placeholder="Your email"
+              onChange={(e) => setEmail(`${e.target.value}`)}
               // required
             />
           </FormGroup>
           <FormGroup>
-            <Label for="backHalfInput">
-              <div className="d-flex align-items-center">Password</div>
-            </Label>
+            <div className='d-flex justify-content-between align-items-center mb-1'>
+              <Label for="backHalfInput">
+                <div className="d-flex align-items-center">Password</div>
+              </Label>
+              <div
+                className={
+                  'd-flex align-items-center text-primary cursor-pointer ' +
+                  (showPassword ? 'd-none' : '')
+                }
+                onClick={() => setShowPassword(true)}
+              >
+                <EyeOutlined className="me-1" /> Show
+              </div>
+              <div
+                className={
+                  'd-flex align-items-center text-primary cursor-pointer ' +
+                  (!showPassword ? 'd-none' : '')
+                }
+                onClick={() => setShowPassword(false)}
+              >
+                <EyeInvisibleOutlined className="me-1" /> Hide
+              </div>
+            </div>
             <Input
-              type="password"
+              type={!showPassword ? 'password' : 'text'}
               name="backHalfInput"
               id="backHalfInput"
               placeholder="Your password"
-              onChange={(e) => setPassword(`${e.target.value}`)}
-              // required
+              onChange={(e) => {
+                setPassword(`${e.target.value}`);
+              }}
             />
           </FormGroup>
           <FormGroup>

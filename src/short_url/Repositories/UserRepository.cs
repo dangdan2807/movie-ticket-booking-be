@@ -53,13 +53,13 @@ namespace MovieTicketBookingBe.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> GetUserByPhone(string phone)
+        public async Task<User> GetUserByEmail(string email)
         {
-            if (string.IsNullOrEmpty(phone))
+            if (string.IsNullOrEmpty(email))
             {
-                throw new ArgumentNullException("phone is null");
+                throw new Exception("email is null");
             }
-            return await _context.Users.FirstOrDefaultAsync(u => u.Phone == phone);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<GetUsersDTO> GetUsers(PaginationVM paginationVM, string? keyword = "", bool? status = null)
@@ -90,7 +90,7 @@ namespace MovieTicketBookingBe.Repositories
 
                 int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
                 int limit = paginationVM.pageSize;
-                string queryString = @"SELECT * FROM Users WHERE (full_name LIKE @keyword OR Phone LIKE @keyword) and status = @status ORDER BY Create_At " +
+                string queryString = @"SELECT * FROM Users WHERE (full_name LIKE @keyword OR Email LIKE @keyword) and status = @status ORDER BY Create_At " +
                     paginationVM.sort + " LIMIT @skip, @limit";
                 MySqlCommand command = new MySqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
@@ -109,7 +109,7 @@ namespace MovieTicketBookingBe.Repositories
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("user_id")),
                             FullName = reader.GetString(reader.GetOrdinal("full_name")),
-                            Phone = reader.GetString(reader.GetOrdinal("Phone")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
                             Address = reader.GetString(reader.GetOrdinal("Address")),
                             Status = reader.GetBoolean(reader.GetOrdinal("Status")),
                             Password = reader.GetString(reader.GetOrdinal("Password")),
@@ -123,7 +123,7 @@ namespace MovieTicketBookingBe.Repositories
             }
 
             var totalUsers = await _context.Users
-                .Where(x => x.FullName.Contains(keyword) || x.Phone.Contains(keyword))
+                .Where(x => x.FullName.Contains(keyword) || x.Email.Contains(keyword))
                 .OrderBy(b => b.Id)
                 .CountAsync();
 
@@ -131,7 +131,7 @@ namespace MovieTicketBookingBe.Repositories
             {
                 id = x.Id,
                 fullName = x.FullName,
-                phone = x.Phone,
+                email = x.Email,
                 address = x.Address,
                 status = x.Status,
                 createAt = x.CreateAt,
@@ -164,13 +164,13 @@ namespace MovieTicketBookingBe.Repositories
                 throw new Exception("User not found");
             }
 
-            // Check if the phone is already in use
-            if (!string.IsNullOrEmpty(updateUserVM.phone))
+            // Check if the email is already in use
+            if (!string.IsNullOrEmpty(updateUserVM.email))
             {
-                var existingPhoneUser = await _context.Users.FirstOrDefaultAsync(u => u.Phone == updateUserVM.phone);
-                if (existingPhoneUser != null && existingPhoneUser.Id != userId)
+                var existingEmailUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == updateUserVM.email);
+                if (existingEmailUser != null && existingEmailUser.Id != userId)
                 {
-                    throw new Exception("Phone is already in use");
+                    throw new Exception("Email is already in use");
                 }
             }
 
@@ -183,9 +183,9 @@ namespace MovieTicketBookingBe.Repositories
             {
                 existingUser.Address = updateUserVM.address;
             }
-            if (!string.IsNullOrEmpty(updateUserVM.phone))
+            if (!string.IsNullOrEmpty(updateUserVM.email))
             {
-                existingUser.Phone = updateUserVM.phone;
+                existingUser.Email = updateUserVM.email;
             }
             if (updateUserVM.status != null)
             {
@@ -223,7 +223,7 @@ namespace MovieTicketBookingBe.Repositories
                 id = existingUser.Id,
                 fullName = existingUser.FullName,
                 address = existingUser.Address,
-                phone = existingUser.Phone,
+                email = existingUser.Email,
                 status = existingUser.Status,
                 createAt = existingUser.CreateAt,
                 roles = roles.Select(r => new RoleDTO
@@ -259,15 +259,15 @@ namespace MovieTicketBookingBe.Repositories
             {
                 user.Address = updateProfileVM.address;
             }
-            if (!string.IsNullOrEmpty(updateProfileVM.phone))
+            if (!string.IsNullOrEmpty(updateProfileVM.email))
             {
-                user.Phone = updateProfileVM.phone;
+                user.Email = updateProfileVM.email;
             }
 
-            var existingPhoneUser = await GetUserByPhone(updateProfileVM.phone);
-            if (existingPhoneUser != null && existingPhoneUser.Id != userId)
+            var existingEmailUser = await GetUserByEmail(updateProfileVM.email);
+            if (existingEmailUser != null && existingEmailUser.Id != userId)
             {
-                throw new Exception("Phone is already in use");
+                throw new Exception("Email is already in use");
             }
 
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(updateProfileVM.confirmPassword, user.Password);

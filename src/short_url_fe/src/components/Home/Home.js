@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 import { LinkOutlined, QrcodeOutlined } from '@ant-design/icons';
 import ShortLinkForm from './ShortLinkForm';
-import './Home.css';
+import './Home.scss';
 import { UserContext } from '../../context/userContext';
 
 export function Home() {
@@ -22,7 +22,7 @@ export function Home() {
   }, []);
 
   return (
-    <div>
+    <div className='pb-4'>
       <div className="d-flex flex-column align-items-center">
         <h1 className="fs-1-xl-title fs-1-md-title fw-bold mt-4">
           Make every <span className="text-primary-color"> connection </span>{' '}
@@ -87,7 +87,7 @@ export function Home() {
           </Nav>
           <TabContent
             activeTab={currentActiveTab}
-            className="border border-2 rounded py-1 px-5"
+            className="border border-2 rounded py-1 px-5 bg-white"
           >
             <TabPane tabId="1">
               <Row>
@@ -99,7 +99,7 @@ export function Home() {
             <TabPane tabId="2">
               <Row>
                 <Col sm="12" className="py-2">
-                  <h5>Sample Tab 2 Content</h5>
+                  <h5>Coming soon...</h5>
                 </Col>
               </Row>
             </TabPane>

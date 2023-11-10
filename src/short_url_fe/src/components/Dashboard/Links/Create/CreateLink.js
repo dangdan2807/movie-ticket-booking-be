@@ -3,10 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import './CreateLink.scss';
-import {
-  createShortUrl,
-  getShortLinks,
-} from './../../../../services/ShortLinkService';
+import { createShortUrl } from './../../../../services/ShortLinkService';
 
 export default function CreateLink() {
   const navigate = useNavigate();

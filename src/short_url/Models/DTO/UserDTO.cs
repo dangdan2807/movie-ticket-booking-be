@@ -6,7 +6,7 @@ namespace MovieTicketBookingBe.Models.DTO
     {
         public int id { get; set; }
         public string fullName { get; set; }
-        public string phone { get; set; }
+        public string email { get; set; }
         public string address { get; set; }
         public bool status { get; set; } = true;
         public DateTime? createAt { get; set; } = DateTime.Now;

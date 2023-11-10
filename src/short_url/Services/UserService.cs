@@ -27,10 +27,10 @@ namespace MovieTicketBookingBe.Services
                 throw new ArgumentNullException("user is null");
             }
 
-            var existingUser = await _userRepository.GetUserByPhone(user.Phone);
+            var existingUser = await _userRepository.GetUserByEmail(user.Email);
             if (existingUser != null)
             {
-                throw new Exception("Phone number already exists");
+                throw new Exception("Email number already exists");
             }
 
             User newUser = await _userRepository.CreateUser(user);
@@ -44,7 +44,7 @@ namespace MovieTicketBookingBe.Services
             {
                 id = newUser.Id,
                 fullName = newUser.FullName,
-                phone = newUser.Phone,
+                email = newUser.Email,
                 address = newUser.Address,
                 status = newUser.Status,
             };
@@ -80,20 +80,20 @@ namespace MovieTicketBookingBe.Services
                 id = user.Id,
                 fullName = user.FullName,
                 address = user.Address,
-                phone = user.Phone,
+                email = user.Email,
                 status = user.Status,
                 createAt = user.CreateAt,
                 roles = rolesDTO
             };
         }
 
-        public async Task<UserDTO?> GetUserByPhone(string phone)
+        public async Task<UserDTO?> GetUserByEmail(string email)
         {
-            if (string.IsNullOrEmpty(phone))
+            if (string.IsNullOrEmpty(email))
             {
-                throw new ArgumentNullException("phone is null");
+                throw new ArgumentNullException("email is empty");
             }
-            var user = await _userRepository.GetUserByPhone(phone);
+            var user = await _userRepository.GetUserByEmail(email);
             if (user == null)
             {
                 return null;
@@ -103,7 +103,7 @@ namespace MovieTicketBookingBe.Services
                 id = user.Id,
                 fullName = user.FullName,
                 address = user.Address,
-                phone = user.Phone,
+                email = user.Email,
                 status = user.Status,
                 createAt = user.CreateAt,
             };
@@ -134,16 +134,16 @@ namespace MovieTicketBookingBe.Services
 
         public async Task<LoginDTO> Login(LoginViewModel loginViewModel)
         {
-            User? user = await _userRepository.GetUserByPhone(loginViewModel.phone);
+            User? user = await _userRepository.GetUserByEmail(loginViewModel.email);
             if (user == null)
             {
-                throw new ArgumentException("Wrong phone or password");
+                throw new Exception("Wrong email or password");
             }
 
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginViewModel.password, user.Password);
             if (!isPasswordValid)
             {
-                throw new ArgumentException("Wrong phone or password");
+                throw new Exception("Wrong email or password");
             }
 
             var accessToken = await _tokenService.GenerateAccessToken(user);
@@ -164,11 +164,11 @@ namespace MovieTicketBookingBe.Services
             }
             if (updateUserVM == null)
             {
-                throw new Exception("UpdateUserVM is null");
+                throw new Exception("UpdateUserVM is empty");
             }
             if (updateUserVM.roleIds == null)
             {
-                throw new Exception("RoleIds is null");
+                throw new Exception("RoleIds is empty");
             }
             if (updateUserVM.roleIds.Count == 0)
             {
@@ -219,7 +219,7 @@ namespace MovieTicketBookingBe.Services
             }
             if (updateProfileVM == null)
             {
-                throw new Exception("UpdateProfileVM is null");
+                throw new Exception("UpdateProfileVM is empty");
             }
 
             var user = await _userRepository.UpdateProfile(userId, updateProfileVM);
@@ -234,7 +234,7 @@ namespace MovieTicketBookingBe.Services
                 id = user.Id,
                 fullName = user.FullName,
                 address = user.Address,
-                phone = user.Phone,
+                email = user.Email,
                 status = user.Status,
                 createAt = user.CreateAt,
                 roles = role.Select(r => new RoleDTO
@@ -271,7 +271,7 @@ namespace MovieTicketBookingBe.Services
                 id = user.Id,
                 fullName = user.FullName,
                 address = user.Address,
-                phone = user.Phone,
+                email = user.Email,
                 status = user.Status,
                 createAt = user.CreateAt,
             };

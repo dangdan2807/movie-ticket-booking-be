@@ -70,14 +70,14 @@ namespace MovieTicketBookingBe.Controllers
                     throw new Exception("Fullname must be between 3 - 50 characters");
                 }
 
-                Regex regex = new Regex(@"^0[3|5|7|8|9]\d{8}$");
-                if (string.IsNullOrEmpty(registerVM?.phone?.Trim()))
+                Regex regex = new Regex(@"^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$");
+                if (string.IsNullOrEmpty(registerVM?.email?.Trim()))
                 {
-                    throw new Exception("Phone is required");
+                    throw new Exception("Email is required");
                 }
-                else if (!regex.IsMatch(registerVM?.phone?.Trim()))
+                else if (!regex.IsMatch(registerVM?.email?.Trim()))
                 {
-                    throw new Exception("Invalid phone number");
+                    throw new Exception("Invalid email");
                 }
 
                 if (string.IsNullOrEmpty(registerVM?.password?.Trim()))
@@ -92,7 +92,7 @@ namespace MovieTicketBookingBe.Controllers
                 var createUser = await _userService.CreateUser(new User
                 {
                     FullName = registerVM.fullname,
-                    Phone = registerVM.phone,
+                    Email = registerVM.email,
                     Address = registerVM.address + "",
                     Password = registerVM.password,
                 });

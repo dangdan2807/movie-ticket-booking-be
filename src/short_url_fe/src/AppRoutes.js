@@ -1,12 +1,13 @@
 import { Home } from './components/Home/Home';
 import Login from './components/Login/Login';
+import Register from './components/Register/Register';
 import RedirectPage from './components/Redirect/RedirectPage';
 import ComingSoon from './components/ComingSoon/ComingSoon';
+import { LayoutDashboard } from './components/Dashboard/LayoutDashboard';
 import HomeDashboard from './components/Dashboard/Home/HomeDashboard';
 import LinksDashboard from './components/Dashboard/Links/LinksDashboard';
-import SettingsDashboard from './components/Dashboard/Settings/SettingsDashboard';
-import { LayoutDashboard } from './components/Dashboard/LayoutDashboard';
 import CreateLink from './components/Dashboard/Links/Create/CreateLink';
+import SettingsDashboard from './components/Dashboard/Settings/SettingsDashboard';
 
 const AppRoutes = [
   {
@@ -19,7 +20,7 @@ const AppRoutes = [
   },
   {
     path: '/register',
-    element: <ComingSoon />,
+    element: <Register />,
   },
   {
     path: '/forgot-password',

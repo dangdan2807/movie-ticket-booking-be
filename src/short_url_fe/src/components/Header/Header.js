@@ -19,8 +19,7 @@ import { UserContext } from '../../context/userContext';
 import { getProfile, logoutServer } from '../../services/UserService';
 
 export function Header() {
-  const { logout, user, currentPage, loginContext } =
-    useContext(UserContext);
+  const { logout, user, currentPage, loginContext } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [collapsed, setCollapsed] = useState(true);
@@ -38,7 +37,7 @@ export function Header() {
     async function fetchData() {
       const res = await getProfile();
       if (res && res.data) {
-        loginContext(res.data.fullName, res.data.phone);
+        loginContext(res.data.fullName, res.data.email);
       } else {
         logout();
       }
@@ -90,11 +89,7 @@ export function Header() {
                 Login
               </NavLink>
             </NavItem>
-            <NavItem
-              className={
-                'd-none ' + (user && user.auth === false ? '' : `d-none`)
-              }
-            >
+            <NavItem className={user && user.auth === false ? '' : `d-none`}>
               <NavLink
                 tag={Link}
                 className={
