@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 
 import './VerticalMenu.scss';
-import { UserContext } from './../../context/userContext';
+import { UserContext } from '../../../context/userContext';
 
 export default function VerticalMenu() {
   const navigate = useNavigate();

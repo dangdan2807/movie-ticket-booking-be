@@ -55,3 +55,42 @@ export const getProfile = () => {
     },
   });
 };
+
+export const updateProfile = (fullName, email) => {
+  const token = getTokenFromLocalStorage();
+  return axios.put(
+    `/v1/users/profile`,
+    {
+      fullName,
+      email,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+};
+
+export const changePassword = (
+  currentPassword,
+  newPassword,
+  confirmPassword,
+) => {
+  const token = getTokenFromLocalStorage();
+  return axios.put(
+    `/v1/users/profile/password`,
+    {
+      currentPassword,
+      newPassword,
+      confirmPassword,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+};

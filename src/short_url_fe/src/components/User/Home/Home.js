@@ -11,7 +11,7 @@ import {
 import { LinkOutlined, QrcodeOutlined } from '@ant-design/icons';
 import ShortLinkForm from './ShortLinkForm';
 import './Home.scss';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../../context/userContext';
 
 export function Home() {
   const { setCurrentPage } = useContext(UserContext);

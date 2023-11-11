@@ -6,7 +6,7 @@ namespace MovieTicketBookingBe.ViewModels
     {
         [Required(ErrorMessage = "Email is required")]
         [StringLength(255, MinimumLength = 6, ErrorMessage = "Email must be between 6 and 255 characters")]
-        [RegularExpression(@"^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$", ErrorMessage = "invalid email")]
+        [RegularExpression(@"^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$", ErrorMessage = "invalid email")]
         public string email { get; set; } = "";
 
         [Required(ErrorMessage = "password is required")]

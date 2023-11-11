@@ -1,7 +1,7 @@
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { deleteShortUrlByShortLink } from '../../services/ShortLinkService';
+import { deleteShortUrlByShortLink } from '../../../services/ShortLinkService';
 
 export default function ModalConfirmDelete(props) {
   const { show, handleClose, shortLink, reloadShortUrls } = props;

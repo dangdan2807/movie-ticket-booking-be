@@ -14,7 +14,7 @@ namespace MovieTicketBookingBe.Models
 
         [Required(ErrorMessage = "Full name is required")]
         [Column("full_name")]
-        [StringLength(100, MinimumLength = 3, ErrorMessage = "Fullname must be between 3 - 100 characters")]
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Full name must be between 3 - 100 characters")]
         public string FullName { get; set; } = null!;
 
         [Required(ErrorMessage = "Password is required")]
@@ -25,7 +25,7 @@ namespace MovieTicketBookingBe.Models
         [Required(ErrorMessage = "Email is required")]
         [Column("email")]
         [StringLength(255, MinimumLength = 6, ErrorMessage = "Email must be between 6 and 255 characters")]
-        [RegularExpression(@"^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$", ErrorMessage = "invalid email")]
+        [RegularExpression(@"^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$", ErrorMessage = "invalid email")]
         public string Email { get; set; } = null!;
 
         [StringLength(255, ErrorMessage = "Address maximum 255 characters")]

@@ -1,13 +1,14 @@
-import { Home } from './components/Home/Home';
-import Login from './components/Login/Login';
-import Register from './components/Register/Register';
-import RedirectPage from './components/Redirect/RedirectPage';
+import { Home } from './components/User/Home/Home';
+import { LayoutDashboard } from './components/User/Dashboard/LayoutDashboard';
+import HomeDashboard from './components/User/Dashboard/Home/HomeDashboard';
+import LinksDashboard from './components/User/Dashboard/Links/LinksDashboard';
+import CreateLink from './components/User/Dashboard/Links/Create/CreateLink';
+import Login from './components/User/Login/Login';
+import Register from './components/User/Register/Register';
+import SettingsDashboard from './components/User/Dashboard/Settings/SettingsDashboard';
+
 import ComingSoon from './components/ComingSoon/ComingSoon';
-import { LayoutDashboard } from './components/Dashboard/LayoutDashboard';
-import HomeDashboard from './components/Dashboard/Home/HomeDashboard';
-import LinksDashboard from './components/Dashboard/Links/LinksDashboard';
-import CreateLink from './components/Dashboard/Links/Create/CreateLink';
-import SettingsDashboard from './components/Dashboard/Settings/SettingsDashboard';
+import RedirectPage from './components/Redirect/RedirectPage';
 
 const AppRoutes = [
   {

@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import './LinksDashboard.scss';
 import ShortLinkItem from './ShortLinkItem';
-import { getShortLinks } from '../../../services/ShortLinkService';
+import { getShortLinks } from '../../../../services/ShortLinkService';
 
 export default function LinksDashboard() {
   const currentDate = dayjs();

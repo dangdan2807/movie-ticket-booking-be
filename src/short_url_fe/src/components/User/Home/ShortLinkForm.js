@@ -4,8 +4,8 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Form, FormGroup, Input, Label, Button } from 'reactstrap';
 import { toast } from 'react-toastify';
 
-import { createShortUrl } from './../../services/ShortLinkService';
-import { UserContext } from '../../context/userContext';
+import { createShortUrl } from '../../../services/ShortLinkService';
+import { UserContext } from '../../../context/userContext';
 
 const ShortLinkForm = () => {
   const navigate = useNavigate();
@@ -70,7 +70,7 @@ const ShortLinkForm = () => {
         onSubmit={async (e) => await handleSubmit(e)}
       >
         <FormGroup>
-          <Label for="longUrlInput">Paste a long URL</Label>
+          <Label htmlFor="longUrlInput">Paste a long URL</Label>
           <Input
             type="text"
             name="longUrlInput"
@@ -80,7 +80,7 @@ const ShortLinkForm = () => {
           />
         </FormGroup>
         <FormGroup>
-          <Label for="backHalfInput">
+          <Label htmlFor="backHalfInput">
             <div className="d-flex align-items-center">
               Enter a back-half (optional)
               <QuestionCircleOutlined className="ps-2" />

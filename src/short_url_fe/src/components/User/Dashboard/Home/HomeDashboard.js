@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 import './HomeDashboard.scss';
-import { countShortLinks } from '../../../services/ShortLinkService';
+import { countShortLinks } from '../../../../services/ShortLinkService';
 
 export default function HomeDashboard() {
   const navigate = useNavigate();

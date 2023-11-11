@@ -270,12 +270,6 @@ namespace MovieTicketBookingBe.Repositories
                 throw new Exception("Email is already in use");
             }
 
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(updateProfileVM.confirmPassword, user.Password);
-            if (!isPasswordValid)
-            {
-                throw new Exception("Wrong password");
-            }
-
             user.UpdateAt = DateTime.Now;
             user.UpdateBy = userId;
 
@@ -297,7 +291,7 @@ namespace MovieTicketBookingBe.Repositories
                 return null;
             }
 
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(updatePasswordVM.oldPassword, user.Password);
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(updatePasswordVM.currentPassword, user.Password);
             if (!isPasswordValid)
             {
                 throw new Exception("Wrong password");
@@ -308,12 +302,12 @@ namespace MovieTicketBookingBe.Repositories
                 throw new Exception("New password is required");
             }
 
-            if (string.IsNullOrEmpty(updatePasswordVM.confirmNewPassword))
+            if (string.IsNullOrEmpty(updatePasswordVM.confirmPassword))
             {
                 throw new Exception("Confirm password is required");
             }
 
-            if (updatePasswordVM.newPassword.Equals(updatePasswordVM.confirmNewPassword))
+            if (!updatePasswordVM.newPassword.Equals(updatePasswordVM.confirmPassword))
             {
                 throw new Exception("Confirm password is not match");
             }

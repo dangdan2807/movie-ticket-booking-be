@@ -119,7 +119,7 @@ export function Header() {
                         {user && user.auth === true ? `${user.name}` : ''}
                       </p>
                       <p className="header__avatar__name">
-                        {user && user.auth === true ? `${user.phone}` : ''}
+                        {user && user.auth === true ? `${user.email}` : ''}
                       </p>
                     </div>
                   </DropdownItem>

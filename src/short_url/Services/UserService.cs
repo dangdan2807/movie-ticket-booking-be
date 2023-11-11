@@ -257,7 +257,7 @@ namespace MovieTicketBookingBe.Services
             }
             if (updatePasswordVM == null)
             {
-                throw new Exception("UpdatePasswordVM is null");
+                throw new Exception("UpdatePasswordVM is empty");
             }
 
             var user = await _userRepository.UpdatePassword(userId, updatePasswordVM);

@@ -9,8 +9,9 @@ import {
 } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 
-import { UserContext } from '../../context/userContext';
-import { register } from './../../services/UserService';
+import { UserContext } from '../../../context/userContext';
+import { register } from '../../../services/UserService';
+import { handleError } from '../../../lib/common';
 
 export default function Register() {
   const { setCurrentPage } = useContext(UserContext);
@@ -45,15 +46,16 @@ export default function Register() {
       setIsErrorFullName(true);
       toast.error('Full name is required');
     }
-    if (fullName.length >= 255) {
+    if (fullName.length >= 100) {
       setIsErrorFullName(true);
-      toast.error('Full name must be less than 255 characters');
+      toast.error('Full name must be less than 100 characters');
     }
     if (!email.trim() || email.length === 0) {
       setIsErrorEmail(true);
       toast.error('email is required');
     }
-    var emailPattern = /^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$/;
+    var emailPattern =
+      /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/;
     if (!emailPattern.test(email)) {
       setIsErrorEmail(true);
       toast.error('Invalid email');
@@ -81,12 +83,7 @@ export default function Register() {
     if (res && res.data) {
       toast.success('Register successful');
     } else {
-      const req = res.response?.data;
-      if (req !== undefined) {
-        toast.error(req.message);
-      } else {
-        toast.error('Register failed');
-      }
+      handleError(res, 'Register failed');
     }
     setLoadingAPI(false);
   };
@@ -115,7 +112,7 @@ export default function Register() {
             onSubmit={async (e) => await handleSubmit(e)}
           >
             <FormGroup>
-              <Label for="fullNameInput">Full Name</Label>
+              <Label htmlFor="fullNameInput">Full Name</Label>
               <Input
                 className={isErrorFullName ? 'is-invalid' : ''}
                 type="text"
@@ -129,7 +126,7 @@ export default function Register() {
               />
             </FormGroup>
             <FormGroup>
-              <Label for="usernameInput">Email</Label>
+              <Label htmlFor="usernameInput">Email</Label>
               <Input
                 className={isErrorEmail ? 'is-invalid' : ''}
                 type="email"
@@ -144,7 +141,7 @@ export default function Register() {
             </FormGroup>
             <FormGroup>
               <div className="d-flex justify-content-between align-items-center mb-1">
-                <Label for="backHalfInput">
+                <Label htmlFor="backHalfInput">
                   <div className="d-flex align-items-center">Password</div>
                 </Label>
                 <div

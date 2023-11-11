@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { LoadingOutlined } from '@ant-design/icons';
 
 import './CreateLink.scss';
-import { createShortUrl } from './../../../../services/ShortLinkService';
+import { createShortUrl } from './../../../../../services/ShortLinkService';
+import { handleError } from '../../../../../lib/common';
 
 export default function CreateLink() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function CreateLink() {
   const [longUrl, setLongUrl] = useState('');
   const [title, setTitle] = useState('');
   const [shortUrl, setShortUrl] = useState('');
+  const [loadingAPI, setLoadingAPI] = useState(false);
   const [messageLongUrl, setMessageLongUrl] = useState('');
   const [messageTitle, setMessageTitle] = useState('');
   const [messageShortUrl, setMessageShortUrl] = useState('');
@@ -63,22 +65,14 @@ export default function CreateLink() {
         break;
     }
     if (!flag) {
+      setLoadingAPI(true);
       const res = await createShortUrl(longUrl, shortUrl, title);
       if (res && res.data) {
         navigate('/links');
       } else {
-        const resErr = res?.response.data.errors;
-        const errorMessages = [];
-
-        for (const field in resErr) {
-          if (resErr.hasOwnProperty(field)) {
-            errorMessages.push(resErr[field][0]);
-          }
-        }
-
-        const resultString = errorMessages.join(', ');
-        toast.error(resultString);
+        handleError(res, 'create link failed');
       }
+      setLoadingAPI(false);
     }
   };
 
@@ -87,7 +81,7 @@ export default function CreateLink() {
       <div>
         <h2 className="fw-bolder">Create new</h2>
         <div class="mb-3 mt-4">
-          <label for="long-url" class="form-label fw-bolder">
+          <label htmlFor="long-url" class="form-label fw-bolder">
             Long url
           </label>
           <input
@@ -105,7 +99,7 @@ export default function CreateLink() {
           <div class="invalid-feedback">{messageLongUrl}</div>
         </div>
         <div class="mb-3 border-2 border-bottom pb-4">
-          <label for="title" class="form-label">
+          <label htmlFor="title" class="form-label">
             <span className="fw-bolder">Title </span>
             (optional)
           </label>
@@ -128,7 +122,7 @@ export default function CreateLink() {
         <h5 className="fw-bolder mt-3">Short link</h5>
         <div className="mb-3 mt-3 d-flex">
           <div className="w-25 me-3">
-            <label for="selectHost" class="form-label fw-bolder">
+            <label htmlFor="selectHost" class="form-label fw-bolder">
               Domain <i class="fa-solid fa-lock ms-1"></i>
             </label>
             <select class="form-select" id="selectHost" disabled>
@@ -138,7 +132,7 @@ export default function CreateLink() {
             </select>
           </div>
           <div className="w-75">
-            <label for="customBackHalf" class="form-label">
+            <label htmlFor="customBackHalf" class="form-label">
               <span className="fw-bolder">Custom back-half </span>
               (optional)
             </label>
@@ -159,7 +153,7 @@ export default function CreateLink() {
           </div>
         </div>
         <div className="mb-3">
-          <label for="checkQR" class="form-label ">
+          <label htmlFor="checkQR" class="form-label ">
             <span className="fw-bolder">QR Code </span>(optional)
           </label>
           <div class="form-check form-switch">
@@ -170,13 +164,13 @@ export default function CreateLink() {
               id="checkQR"
               disabled
             />
-            <label class="form-check-label" for="checkQR">
+            <label class="form-check-label" htmlFor="checkQR">
               Generate a QR Code to share anywhere people can scan it
             </label>
           </div>
         </div>
         <div className="mb-4">
-          <label for="checkLinkInBio" class="form-label ">
+          <label htmlFor="checkLinkInBio" class="form-label ">
             <span className="fw-bolder">Link-in-bio </span>(optional)
           </label>
           <div class="form-check form-switch">
@@ -187,8 +181,8 @@ export default function CreateLink() {
               id="checkLinkInBio"
               disabled
             />
-            <label class="form-check-label" for="checkLinkInBio">
-              Add this link to your Link-in-bio page for people to easily find
+            <label class="form-check-label" htmlFor="checkLinkInBio">
+              Add this link to your Link-in-bio page htmlFor people to easily find
             </label>
           </div>
         </div>
@@ -222,6 +216,7 @@ export default function CreateLink() {
             class="btn btn-primary px-5"
             onClick={() => handleAdd()}
           >
+            {loadingAPI && <LoadingOutlined className="me-2" />}
             Add
           </button>
         </div>

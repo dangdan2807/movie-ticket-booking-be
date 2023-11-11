@@ -6,7 +6,7 @@ namespace MovieTicketBookingBe.ViewModels
     {
         [Required]
         [StringLength(255, MinimumLength = 6, ErrorMessage = "Current password must be between 6 - 255 characters")]
-        public string oldPassword { get; set; } = "";
+        public string currentPassword { get; set; } = "";
 
         [Required]
         [StringLength(255, MinimumLength = 6, ErrorMessage = "New password must be between 6 - 255 characters")]
@@ -14,6 +14,6 @@ namespace MovieTicketBookingBe.ViewModels
 
         [Required]
         [StringLength(255, MinimumLength = 6, ErrorMessage = "Confirm new password must be between 6 - 255 characters")]
-        public string confirmNewPassword { get; set; } = "";
+        public string confirmPassword { get; set; } = "";
     }
 }

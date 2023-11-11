@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 
 import './ShortLinkItem.scss';
-import { hiddenShortUrl } from '../../../services/ShortLinkService';
+import { hiddenShortUrl } from '../../../../services/ShortLinkService';
 import ModalConfirmDelete from '../../Modals/ModalConfirmDelete';
 
 export default function ShortLinkItem(props) {

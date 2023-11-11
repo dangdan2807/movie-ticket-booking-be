@@ -10,9 +10,10 @@ import {
 } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 
-import { UserContext } from './../../context/userContext';
-import { storeTokenInLocalStorage } from './../../lib/common';
-import { getProfile, login } from './../../services/UserService';
+import { UserContext } from '../../../context/userContext';
+import { storeTokenInLocalStorage } from '../../../lib/common';
+import { getProfile, login } from '../../../services/UserService';
+import { handleError } from '../../../lib/common';
 import './Login.scss';
 
 export default function Login() {
@@ -55,7 +56,7 @@ export default function Login() {
       return;
     }
     var emailPattern =
-      /^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$/;
+      /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/;
     if (!emailPattern.test(email)) {
       toast.error('Invalid email');
       return;
@@ -83,12 +84,7 @@ export default function Login() {
         navigate('/login');
       }
     } else {
-      const req = res.response?.data;
-      if (req !== undefined) {
-        toast.error(req.message);
-      } else {
-        toast.error('Login failed');
-      }
+      handleError(res, 'Login failed');
     }
     setLoadingAPI(false);
   };
@@ -121,7 +117,7 @@ export default function Login() {
           onSubmit={async (e) => await handleSubmit(e)}
         >
           <FormGroup>
-            <Label for="usernameInput">Email</Label>
+            <Label htmlFor="usernameInput">Email</Label>
             <Input
               type="email"
               name="usernameInput"
@@ -132,8 +128,8 @@ export default function Login() {
             />
           </FormGroup>
           <FormGroup>
-            <div className='d-flex justify-content-between align-items-center mb-1'>
-              <Label for="backHalfInput">
+            <div className="d-flex justify-content-between align-items-center mb-1">
+              <Label htmlFor="backHalfInput">
                 <div className="d-flex align-items-center">Password</div>
               </Label>
               <div

@@ -70,7 +70,7 @@ namespace MovieTicketBookingBe.Controllers
                     throw new Exception("Fullname must be between 3 - 50 characters");
                 }
 
-                Regex regex = new Regex(@"^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$");
+                Regex regex = new Regex(@"^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$");
                 if (string.IsNullOrEmpty(registerVM?.email?.Trim()))
                 {
                     throw new Exception("Email is required");
