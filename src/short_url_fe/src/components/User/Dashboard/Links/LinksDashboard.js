@@ -101,7 +101,7 @@ export default function LinksDashboard() {
                     href=""
                     onClick={() => handlerChangeFilterShow(true)}
                   >
-                    Action
+                    Active
                     <CheckOutlined
                       className={filterShow === true ? '' : 'd-none'}
                     />

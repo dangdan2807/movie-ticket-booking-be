@@ -5,6 +5,7 @@ import { deleteShortUrlByShortLink } from '../../../services/ShortLinkService';
 
 export default function ModalConfirmDelete(props) {
   const { show, handleClose, shortLink, reloadShortUrls } = props;
+
   const confirmDelete = async () => {
     const res = await deleteShortUrlByShortLink(shortLink?.shortUrl);
     if (res && res.statusCode === 204) {

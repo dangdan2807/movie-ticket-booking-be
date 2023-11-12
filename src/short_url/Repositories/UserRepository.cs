@@ -62,8 +62,23 @@ namespace MovieTicketBookingBe.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<GetUsersDTO> GetUsers(PaginationVM paginationVM, string? keyword = "", bool? status = null)
+        public async Task<GetUsersDTO> GetUsers(PaginationVM paginationVM, string? keyword = "", bool? status = null,
+            DateTime? startDate = null, DateTime? endDate = null)
         {
+            DateTime currentDate = DateTime.Now;
+            DateTime sDate = currentDate.Date;
+            DateTime eDate = currentDate.Date.AddDays(1);
+            if (startDate.HasValue)
+            {
+                sDate = startDate.Value.Date;
+            }
+            if (endDate.HasValue)
+            {
+                eDate = endDate.Value.Date;
+            }
+            _logger.Information(sDate + " " + eDate + "");
+            _logger.Information(startDate.Value.Date + " " + endDate.Value.Date + "");
+
             if (paginationVM.currentPage <= 0)
             {
                 throw new Exception("Current page is invalid");
@@ -90,10 +105,13 @@ namespace MovieTicketBookingBe.Repositories
 
                 int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
                 int limit = paginationVM.pageSize;
-                string queryString = @"SELECT * FROM Users WHERE (full_name LIKE @keyword OR Email LIKE @keyword) and status = @status ORDER BY Create_At " +
+                string queryString = @"SELECT * FROM Users WHERE (full_name LIKE @keyword OR Email LIKE @keyword) " +
+                    "and Create_At between @startDate and @endDate and status = @status ORDER BY Create_At " +
                     paginationVM.sort + " LIMIT @skip, @limit";
                 MySqlCommand command = new MySqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
+                command.Parameters.AddWithValue("@startDate", sDate);
+                command.Parameters.AddWithValue("@endDate", eDate);
                 if (status != null)
                 {
                     command.Parameters.AddWithValue("@status", status);

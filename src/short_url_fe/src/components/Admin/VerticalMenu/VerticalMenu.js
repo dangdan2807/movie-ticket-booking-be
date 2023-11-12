@@ -95,6 +95,7 @@ export default function VerticalMenu() {
           {renderItems.map((item, index) => {
             return (
               <NavItem
+                key={index}
                 className={
                   (activeItemVerticalMenu === item.activeItem ? 'active' : '') +
                   ' dashboard__nav-item'

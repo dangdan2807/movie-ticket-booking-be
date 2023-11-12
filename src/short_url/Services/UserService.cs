@@ -109,7 +109,8 @@ namespace MovieTicketBookingBe.Services
             };
         }
 
-        public async Task<GetUsersDTO> GetUsers(PaginationVM paginationVM, string? keyword = "", bool? status = null)
+        public async Task<GetUsersDTO> GetUsers(PaginationVM paginationVM, string? keyword = "", bool? status = null, 
+            DateTime? startDate = null, DateTime? endDate = null)
         {
             if (paginationVM.currentPage <= 0)
             {
@@ -129,7 +130,7 @@ namespace MovieTicketBookingBe.Services
             {
                 throw new Exception("Sort is invalid");
             }
-            return await _userRepository.GetUsers(paginationVM, keyword, status);
+            return await _userRepository.GetUsers(paginationVM, keyword, status, startDate, endDate);
         }
 
         public async Task<LoginDTO> Login(LoginViewModel loginViewModel)

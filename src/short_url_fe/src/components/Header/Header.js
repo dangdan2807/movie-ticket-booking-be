@@ -49,12 +49,12 @@ export function Header() {
           res.data.roles[0].roleId === 1 &&
           res.data.roles[0].roleCode === 'ADMIN';
         if (isAdmin) {
-          loginContext(res.data.fullName, res.data.email, true);
+          loginContext(res.data.id, res.data.fullName, res.data.email, true);
           if (!currentPathname.includes('/admin')) {
             navigate('/admin');
           }
         } else {
-          loginContext(res.data.fullName, res.data.email, false);
+          loginContext(res.data.id, res.data.fullName, res.data.email, false);
           if (currentPathname.includes('/admin')) {
             navigate('/dashboard');
           }

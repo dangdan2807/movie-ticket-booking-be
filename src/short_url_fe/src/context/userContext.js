@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 
-const UserContext = React.createContext({ name: '', email: '', auth: false, isAdmin: false });
+const UserContext = React.createContext({
+  id: 0,
+  name: '',
+  email: '',
+  auth: false,
+  isAdmin: false,
+});
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({ name: '', email: '', auth: false, isAdmin: false });
+  const [user, setUser] = useState({
+    id: 0,
+    name: '',
+    email: '',
+    auth: false,
+    isAdmin: false,
+  });
   const [currentPage, setCurrentPage] = useState('home');
   const [activeItemVerticalMenu, setActiveItemVerticalMenu] = useState('home');
 
-  const loginContext = (name, email, isAdmin) => {
+  const loginContext = (id, name, email, isAdmin) => {
     setUser({
+      id,
       name,
       email,
       auth: true,
@@ -19,6 +32,7 @@ const UserProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setUser({
+      id: 0,
       name: '',
       email: '',
       auth: false,

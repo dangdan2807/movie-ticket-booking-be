@@ -81,7 +81,7 @@ export default function Login() {
           resProfile.data.roles[0].roleId === 1 &&
           resProfile.data.roles[0].roleCode === 'ADMIN';
         if (isAdmin === true) {
-          loginContext(resProfile.data.fullName, resProfile.data.email, isAdmin);
+          loginContext(resProfile.data.id, resProfile.data.fullName, resProfile.data.email, isAdmin);
           navigate('/admin');
         } else {
           toast.error('user not found');

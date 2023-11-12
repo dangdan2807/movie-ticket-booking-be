@@ -84,7 +84,7 @@ export default function Login() {
           toast.error('user not found');
           logout();
         } else {
-          loginContext(resProfile.data.fullName, resProfile.data.email, isAdmin);
+          loginContext(resProfile.data.id, resProfile.data.fullName, resProfile.data.email, isAdmin);
           navigate('/');
         }
       } else {

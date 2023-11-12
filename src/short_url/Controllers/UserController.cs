@@ -24,11 +24,12 @@ namespace MovieTicketBookingBe.Controllers
 
         [HttpGet]
         [Authorize(Roles = "ADMIN, MOD")]
-        public async Task<IActionResult> GetUsers([FromQuery] PaginationVM paginationVM, string? keyword = "", bool? status = true)
+        public async Task<IActionResult> GetUsers([FromQuery] PaginationVM paginationVM, string? keyword = "", bool? status = true,
+            DateTime? startDate = null, DateTime? endDate = null)
         {
             try
             {
-                var usersDTO = await _userService.GetUsers(paginationVM, keyword, status);
+                var usersDTO = await _userService.GetUsers(paginationVM, keyword, status, startDate, endDate);
 
                 var successResponse = new SuccessResponse(
                     HttpStatusCode.OK,
