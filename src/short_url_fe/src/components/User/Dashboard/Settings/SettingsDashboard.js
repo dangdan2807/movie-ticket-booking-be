@@ -5,7 +5,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { UserContext } from '../../../../context/userContext';
 import {
   updateProfile,
-  getProfile,
+  getProfileUser,
   changePassword,
 } from './../../../../services/UserService';
 import { handleError } from '../../../../lib/common';
@@ -18,7 +18,7 @@ export default function SettingsDashboard() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getProfile();
+      const res = await getProfileUser();
       if (res && res.data) {
         setFullName(res.data.fullName);
         setEmail(res.data.email);
@@ -48,17 +48,17 @@ export default function SettingsDashboard() {
   const handleUpdateFullName = async () => {
     if (fullName.trim().length <= 0) {
       toast.error('Full name is required');
-      setIsErrorCurrentPassword(true);
+      setIsErrorFullName(true);
       return;
     }
     if (fullName.trim().length >= 100 || fullName.trim().length < 6) {
       toast.error('Full name must be between 6 - 100 characters');
-      setIsErrorCurrentPassword(true);
+      setIsErrorFullName(true);
       return;
     }
 
     setLoadingAPIFullName(true);
-    const resGet = await getProfile();
+    const resGet = await getProfileUser();
     if (resGet && resGet.data) {
       const resUpdate = await updateProfile(
         fullName.trim(),
@@ -93,7 +93,7 @@ export default function SettingsDashboard() {
     }
 
     setLoadingAPIEmail(true);
-    const resGet = await getProfile();
+    const resGet = await getProfileUser();
     if (resGet && resGet.data) {
       const resUpdate = await updateProfile(
         resGet.data?.fullName,
@@ -193,6 +193,7 @@ export default function SettingsDashboard() {
               value={fullName}
               placeholder="Your full name"
               onChange={(e) => {
+                setIsErrorFullName(false);
                 setFullName(e.target.value);
                 setIsEnableUpdateFullName(false);
               }}
@@ -221,6 +222,7 @@ export default function SettingsDashboard() {
               placeholder="Your email address"
               onChange={(e) => {
                 setEmail(e.target.value);
+                setIsErrorEmail(false);
                 setIsEnableUpdateEmail(false);
               }}
             />

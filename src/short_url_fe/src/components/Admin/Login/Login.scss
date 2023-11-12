@@ -1,0 +1,13 @@
+.btn-bg-primary {
+  background-color: #2a5bd7;
+  &:focus {
+    box-shadow: none !important;
+    background-color: #0352d0;
+  }
+  &:hover {
+    background-color: #0352d0;
+  }
+  &:active {
+    background-color: #0352d0 !important;
+  }
+}

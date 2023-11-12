@@ -101,8 +101,37 @@ namespace MovieTicketBookingBe.Controllers
         }
 
         [HttpGet("profile")]
-        [Authorize]
-        public async Task<IActionResult> GetProfile()
+        [Authorize(Roles = "VIP, MEMBER")]
+        public async Task<IActionResult> GetProfileUser()
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) + "";
+                int userIdInt = int.Parse(userId);
+
+                var userDTO = await _userService.GetUserById(userIdInt);
+                if (userDTO == null)
+                {
+                    throw new Exception("User not found");
+                }
+
+                var successResponse = new SuccessResponse(
+                    HttpStatusCode.OK,
+                    "Get user profile successfully",
+                    userDTO
+                );
+                return Ok(successResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return BadRequest(new ErrorResponse(HttpStatusCode.BadRequest, ex.Message));
+            }
+        }
+
+        [HttpGet("admin/profile")]
+        [Authorize(Roles = "ADMIN, MOD")]
+        public async Task<IActionResult> GetProfileAdmin()
         {
             try
             {

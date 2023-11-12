@@ -1,0 +1,19 @@
+.dashboard {
+  &__menu {
+    height: 100% !important;
+    min-height: 89vh !important;
+  }
+  &__nav-item {
+    border-radius: 0.4rem;
+    margin-top: 0.5rem;
+    &:hover {
+      background-color: #f4f6fa;
+    }
+    &.active {
+      background-color: #edf2ff;
+      & > a {
+        color: #0c3ebb !important;
+      }
+    }
+  }
+}

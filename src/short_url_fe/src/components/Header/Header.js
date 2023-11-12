@@ -16,7 +16,11 @@ import { UserOutlined } from '@ant-design/icons';
 
 import './Header.scss';
 import { UserContext } from '../../context/userContext';
-import { getProfile, logoutServer } from '../../services/UserService';
+import {
+  getProfileAdmin,
+  getProfileUser,
+  logoutServer,
+} from '../../services/UserService';
 
 export function Header() {
   const { logout, user, currentPage, loginContext } = useContext(UserContext);
@@ -35,9 +39,26 @@ export function Header() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getProfile();
+      const currentPathname = window.location.pathname;
+      const res = currentPathname.includes('/admin')
+        ? await getProfileAdmin()
+        : await getProfileUser();
       if (res && res.data) {
-        loginContext(res.data.fullName, res.data.email);
+        const currentPathname = window.location.pathname;
+        const isAdmin =
+          res.data.roles[0].roleId === 1 &&
+          res.data.roles[0].roleCode === 'ADMIN';
+        if (isAdmin) {
+          loginContext(res.data.fullName, res.data.email, true);
+          if (!currentPathname.includes('/admin')) {
+            navigate('/admin');
+          }
+        } else {
+          loginContext(res.data.fullName, res.data.email, false);
+          if (currentPathname.includes('/admin')) {
+            navigate('/dashboard');
+          }
+        }
       } else {
         logout();
       }
@@ -126,7 +147,11 @@ export function Header() {
                   <DropdownItem divider />
                   <DropdownItem>
                     <Link
-                      to="/dashboard"
+                      to={
+                        user && user.auth === true && user.isAdmin === false
+                          ? '/dashboard'
+                          : '/admin'
+                      }
                       className="text-black text-decoration-none nav-menu-link"
                     >
                       Dashboard

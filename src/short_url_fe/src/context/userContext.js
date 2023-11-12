@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 
-const UserContext = React.createContext({ name: '', email: '', auth: false });
+const UserContext = React.createContext({ name: '', email: '', auth: false, isAdmin: false });
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({ name: '', email: '', auth: false });
+  const [user, setUser] = useState({ name: '', email: '', auth: false, isAdmin: false });
   const [currentPage, setCurrentPage] = useState('home');
   const [activeItemVerticalMenu, setActiveItemVerticalMenu] = useState('home');
 
-  const loginContext = (name, email) => {
+  const loginContext = (name, email, isAdmin) => {
     setUser({
       name,
       email,
       auth: true,
+      isAdmin: isAdmin ?? false,
     });
   };
 
@@ -21,6 +22,7 @@ const UserProvider = ({ children }) => {
       name: '',
       email: '',
       auth: false,
+      isAdmin: false,
     });
   };
 

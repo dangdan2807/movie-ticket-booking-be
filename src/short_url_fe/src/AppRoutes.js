@@ -1,11 +1,16 @@
 import { Home } from './components/User/Home/Home';
-import { LayoutDashboard } from './components/User/Dashboard/LayoutDashboard';
+import { LayoutDashboardUser } from './components/User/Dashboard/LayoutDashboardUser';
+import { LayoutDashboardAdmin } from './components/Admin/LayoutDashboardAdmin';
 import HomeDashboard from './components/User/Dashboard/Home/HomeDashboard';
 import LinksDashboard from './components/User/Dashboard/Links/LinksDashboard';
 import CreateLink from './components/User/Dashboard/Links/Create/CreateLink';
 import Login from './components/User/Login/Login';
 import Register from './components/User/Register/Register';
 import SettingsDashboard from './components/User/Dashboard/Settings/SettingsDashboard';
+
+import LoginAdmin from './components/Admin/Login/Login';
+import HomeAdmin from './components/Admin/Home/Home';
+import UsersAdmin from './components/Admin/Users/Users';
 
 import ComingSoon from './components/ComingSoon/ComingSoon';
 import RedirectPage from './components/Redirect/RedirectPage';
@@ -14,6 +19,58 @@ const AppRoutes = [
   {
     index: true,
     element: <Home />,
+  },
+  {
+    path: '/admin',
+    element: (
+      <LayoutDashboardAdmin>
+        <ComingSoon />
+      </LayoutDashboardAdmin>
+    ),
+  },
+  {
+    path: '/admin/users',
+    element: (
+      <LayoutDashboardAdmin>
+        <UsersAdmin />
+      </LayoutDashboardAdmin>
+    ),
+  },
+  {
+    path: '/admin/links',
+    element: (
+      <LayoutDashboardAdmin>
+        <ComingSoon />
+      </LayoutDashboardAdmin>
+    ),
+  },
+  {
+    path: '/admin/qr-codes',
+    element: (
+      <LayoutDashboardAdmin>
+        <ComingSoon />
+      </LayoutDashboardAdmin>
+    ),
+  },
+  {
+    path: '/admin/link-in-bio',
+    element: (
+      <LayoutDashboardAdmin>
+        <ComingSoon />
+      </LayoutDashboardAdmin>
+    ),
+  },
+  {
+    path: '/admin/settings',
+    element: (
+      <LayoutDashboardAdmin>
+        <ComingSoon />
+      </LayoutDashboardAdmin>
+    ),
+  },
+  {
+    path: '/admin/login',
+    element: <LoginAdmin />,
   },
   {
     path: '/login',
@@ -30,49 +87,49 @@ const AppRoutes = [
   {
     path: '/dashboard',
     element: (
-      <LayoutDashboard>
+      <LayoutDashboardUser>
         <HomeDashboard />
-      </LayoutDashboard>
+      </LayoutDashboardUser>
     ),
   },
   {
     path: '/links',
     element: (
-      <LayoutDashboard>
+      <LayoutDashboardUser>
         <LinksDashboard />
-      </LayoutDashboard>
+      </LayoutDashboardUser>
     ),
   },
   {
     path: '/links/create',
     element: (
-      <LayoutDashboard>
+      <LayoutDashboardUser>
         <CreateLink />
-      </LayoutDashboard>
+      </LayoutDashboardUser>
     ),
   },
   {
     path: '/link-in-bio',
     element: (
-      <LayoutDashboard>
+      <LayoutDashboardUser>
         <ComingSoon />
-      </LayoutDashboard>
+      </LayoutDashboardUser>
     ),
   },
   {
     path: '/qr-codes',
     element: (
-      <LayoutDashboard>
+      <LayoutDashboardUser>
         <ComingSoon />
-      </LayoutDashboard>
+      </LayoutDashboardUser>
     ),
   },
   {
     path: '/settings',
     element: (
-      <LayoutDashboard>
+      <LayoutDashboardUser>
         <SettingsDashboard />
-      </LayoutDashboard>
+      </LayoutDashboardUser>
     ),
   },
   {

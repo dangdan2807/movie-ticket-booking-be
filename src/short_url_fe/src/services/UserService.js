@@ -46,9 +46,19 @@ export const logoutServer = () => {
   );
 };
 
-export const getProfile = () => {
+export const getProfileUser = () => {
   const token = getTokenFromLocalStorage();
   return axios.get(`/v1/users/profile`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getProfileAdmin = () => {
+  const token = getTokenFromLocalStorage();
+  return axios.get(`/v1/users/admin/profile`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,

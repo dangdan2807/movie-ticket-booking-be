@@ -177,26 +177,26 @@ export default function HomeDashboard() {
       </div>
       <div className="row my-4 bg-white border border-0 rounded-3 py-3 px-0">
         <div className="col-12 d-flex align-items-center justify-content-center">
-          <div class="card border border-0 mb-2" style={{ maxWidth: '800px' }}>
-            <div class="row g-0">
-              <div class="col-md-6">
+          <div className="card border border-0 mb-2" style={{ maxWidth: '800px' }}>
+            <div className="row g-0">
+              <div className="col-md-6">
                 <img
                   src="https://app.bitly.com/s/bbt2/images/dashboard-empty-state.png"
-                  class="img-fluid rounded-start"
+                  className="img-fluid rounded-start"
                   alt="..."
                 />
               </div>
-              <div class="col-md-6">
-                <div class="card-body">
-                  <h5 class="card-title">Every click tells a story</h5>
-                  <p class="card-text">
+              <div className="col-md-6">
+                <div className="card-body">
+                  <h5 className="card-title">Every click tells a story</h5>
+                  <p className="card-text">
                     Upgrade for a snapshot of your click and scan data in a
                     single dashboard. Get click metrics by location, device,
                     referrers, and more. View plans Learn more
                   </p>
-                  <p class="card-text">
+                  <p className="card-text">
                     <a
-                      class="btn btn-primary fw-semibold"
+                      className="btn btn-primary fw-semibold"
                       href="http://localhost:44481/dashboard"
                       role="button"
                       target="_blank"
@@ -205,7 +205,7 @@ export default function HomeDashboard() {
                       View plans
                     </a>
                     <a
-                      class="btn ms-2 text-primary fw-semibold"
+                      className="btn ms-2 text-primary fw-semibold"
                       href="http://localhost:44481/dashboard"
                       role="button"
                       target="_blank"

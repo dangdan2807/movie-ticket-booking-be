@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 import { UserContext } from '../../../context/userContext';
 import { storeTokenInLocalStorage } from '../../../lib/common';
-import { getProfileUser, login } from '../../../services/UserService';
+import { getProfileAdmin, login } from '../../../services/UserService';
 import { handleError } from '../../../lib/common';
 import './Login.scss';
 
@@ -31,10 +31,10 @@ export default function Login() {
   }, []);
 
   useEffect(() => {
-    if (user && user.auth === true) {
-      navigate('/');
+    if (user && user.auth === true && user.isAdmin === true) {
+      navigate('/admin');
     } else {
-      navigate('/login');
+      navigate('/admin/login');
     }
   }, [user]);
 
@@ -75,17 +75,17 @@ export default function Login() {
     let res = await login(email, password);
     if (res && res.data) {
       storeTokenInLocalStorage(res.data.accessToken);
-      let resProfile = await getProfileUser();
+      let resProfile = await getProfileAdmin();
       if (resProfile && resProfile.data) {
         const isAdmin =
           resProfile.data.roles[0].roleId === 1 &&
           resProfile.data.roles[0].roleCode === 'ADMIN';
         if (isAdmin === true) {
+          loginContext(resProfile.data.fullName, resProfile.data.email, isAdmin);
+          navigate('/admin');
+        } else {
           toast.error('user not found');
           logout();
-        } else {
-          loginContext(resProfile.data.fullName, resProfile.data.email, isAdmin);
-          navigate('/');
         }
       } else {
         logout();
@@ -99,10 +99,10 @@ export default function Login() {
 
   return (
     <div className="mt-5 d-flex flex-column align-items-center text-secondary">
-      <h2 className=" fw-medium">Log in and start sharing</h2>
-      <p>
+      <h2 className=" fw-medium">Log in for Admin</h2>
+      {/* <p>
         Don't have an account? <Link to="/register">Sign up</Link>
-      </p>
+      </p> */}
       <p>Log in with:</p>
       <div className="d-flex">
         <Button className="btn-bg-primary fw-medium border border-0 rounded-1 py-2 px-3 d-flex align-items-center me-1">

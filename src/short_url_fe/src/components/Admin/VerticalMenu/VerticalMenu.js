@@ -1,13 +1,13 @@
 import { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Nav, NavItem, NavLink, Button } from 'reactstrap';
+import { Nav, NavItem, NavLink } from 'reactstrap';
 import {
   HomeOutlined,
   LinkOutlined,
-  PlusCircleOutlined,
   QrcodeOutlined,
   ContainerOutlined,
   ToolOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 
 import './VerticalMenu.scss';
@@ -22,20 +22,22 @@ export default function VerticalMenu() {
   useEffect(() => {
     const currentPathName = window.location.pathname;
     switch (currentPathName) {
-      case '/dashboard':
+      case '/admin':
         setActiveItemVerticalMenu('home');
         break;
-      case '/links':
-      case '/links/create':
+      case '/admin/users':
+        setActiveItemVerticalMenu('users');
+        break;
+      case '/admin/links':
         setActiveItemVerticalMenu('links');
         break;
-      case '/settings':
+      case '/admin/settings':
         setActiveItemVerticalMenu('settings');
         break;
-      case '/qr-codes':
+      case '/admin/qr-codes':
         setActiveItemVerticalMenu('qr-codes');
         break;
-      case '/link-in-bio':
+      case '/admin/link-in-bio':
         setActiveItemVerticalMenu('link-in-bio');
         break;
       default:
@@ -47,31 +49,37 @@ export default function VerticalMenu() {
   const renderItems = [
     {
       title: 'Home',
-      link: '/dashboard',
+      link: '/admin',
       activeItem: 'home',
       icon: <HomeOutlined className="me-2" />,
     },
     {
+      title: 'Users',
+      link: '/admin/users',
+      activeItem: 'users',
+      icon: <UserOutlined className="me-2" />,
+    },
+    {
       title: 'Links',
-      link: '/links',
+      link: '/admin/links',
       activeItem: 'links',
       icon: <LinkOutlined className="me-2" />,
     },
     {
       title: 'QR Codes',
-      link: '/qr-codes',
+      link: '/admin/qr-codes',
       activeItem: 'qr-codes',
       icon: <QrcodeOutlined className="me-2" />,
     },
     {
       title: 'Link-in-bio',
-      link: '/link-in-bio',
+      link: '/admin/link-in-bio',
       activeItem: 'link-in-bio',
       icon: <ContainerOutlined className="me-2" />,
     },
     {
       title: 'Settings',
-      link: '/settings',
+      link: '/admin/settings',
       activeItem: 'settings',
       icon: <ToolOutlined className="me-2" />,
     },
@@ -84,22 +92,9 @@ export default function VerticalMenu() {
           vertical
           className="px-3 h-100 border-end dashboard__menu bg-white"
         >
-          <NavItem className="mt-2">
-            <Button
-              className="w-100 d-flex align-items-center justify-content-center"
-              color="primary"
-              onClick={() => {
-                navigate('/links/create');
-              }}
-            >
-              <PlusCircleOutlined className="me-2" />
-              Create new
-            </Button>
-          </NavItem>
           {renderItems.map((item, index) => {
             return (
               <NavItem
-                key={item.activeItem}
                 className={
                   (activeItemVerticalMenu === item.activeItem ? 'active' : '') +
                   ' dashboard__nav-item'

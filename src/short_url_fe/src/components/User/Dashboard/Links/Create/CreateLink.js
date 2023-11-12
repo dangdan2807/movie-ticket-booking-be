@@ -80,13 +80,13 @@ export default function CreateLink() {
     <>
       <div>
         <h2 className="fw-bolder">Create new</h2>
-        <div class="mb-3 mt-4">
-          <label htmlFor="long-url" class="form-label fw-bolder">
+        <div className="mb-3 mt-4">
+          <label htmlFor="long-url" className="form-label fw-bolder">
             Long url
           </label>
           <input
             type="url"
-            class={
+            className={
               'form-control ' + (messageLongUrl.length > 0 ? 'is-invalid' : '')
             }
             id="long-url"
@@ -96,16 +96,16 @@ export default function CreateLink() {
               setLongUrl(e.target.value);
             }}
           />
-          <div class="invalid-feedback">{messageLongUrl}</div>
+          <div className="invalid-feedback">{messageLongUrl}</div>
         </div>
-        <div class="mb-3 border-2 border-bottom pb-4">
-          <label htmlFor="title" class="form-label">
+        <div className="mb-3 border-2 border-bottom pb-4">
+          <label htmlFor="title" className="form-label">
             <span className="fw-bolder">Title </span>
             (optional)
           </label>
           <input
             type="text"
-            class={
+            className={
               'form-control ' + (messageTitle.length > 0 ? 'is-invalid' : '')
             }
             id="title"
@@ -116,29 +116,29 @@ export default function CreateLink() {
               setTitle(e.target.value);
             }}
           />
-          <div class="invalid-feedback">{messageTitle}</div>
+          <div className="invalid-feedback">{messageTitle}</div>
         </div>
         <h4 className="fw-bolder">Ways to share</h4>
         <h5 className="fw-bolder mt-3">Short link</h5>
         <div className="mb-3 mt-3 d-flex">
           <div className="w-25 me-3">
-            <label htmlFor="selectHost" class="form-label fw-bolder">
-              Domain <i class="fa-solid fa-lock ms-1"></i>
+            <label htmlFor="selectHost" className="form-label fw-bolder">
+              Domain <i className="fa-solid fa-lock ms-1"></i>
             </label>
-            <select class="form-select" id="selectHost" disabled>
+            <select className="form-select" id="selectHost" disabled>
               <option value="1" selected>
                 {window.location.host}
               </option>
             </select>
           </div>
           <div className="w-75">
-            <label htmlFor="customBackHalf" class="form-label">
+            <label htmlFor="customBackHalf" className="form-label">
               <span className="fw-bolder">Custom back-half </span>
               (optional)
             </label>
             <input
               type="email"
-              class={
+              className={
                 'form-control ' +
                 (messageShortUrl.length > 0 ? 'is-invalid' : '')
               }
@@ -149,39 +149,39 @@ export default function CreateLink() {
                 setShortUrl(e.target.value);
               }}
             />
-            <div class="invalid-feedback">{messageShortUrl}</div>
+            <div className="invalid-feedback">{messageShortUrl}</div>
           </div>
         </div>
         <div className="mb-3">
-          <label htmlFor="checkQR" class="form-label ">
+          <label htmlFor="checkQR" className="form-label ">
             <span className="fw-bolder">QR Code </span>(optional)
           </label>
-          <div class="form-check form-switch">
+          <div className="form-check form-switch">
             <input
-              class="form-check-input"
+              className="form-check-input"
               type="checkbox"
               role="switch"
               id="checkQR"
               disabled
             />
-            <label class="form-check-label" htmlFor="checkQR">
+            <label className="form-check-label" htmlFor="checkQR">
               Generate a QR Code to share anywhere people can scan it
             </label>
           </div>
         </div>
         <div className="mb-4">
-          <label htmlFor="checkLinkInBio" class="form-label ">
+          <label htmlFor="checkLinkInBio" className="form-label ">
             <span className="fw-bolder">Link-in-bio </span>(optional)
           </label>
-          <div class="form-check form-switch">
+          <div className="form-check form-switch">
             <input
-              class="form-check-input"
+              className="form-check-input"
               type="checkbox"
               role="switch"
               id="checkLinkInBio"
               disabled
             />
-            <label class="form-check-label" htmlFor="checkLinkInBio">
+            <label className="form-check-label" htmlFor="checkLinkInBio">
               Add this link to your Link-in-bio page htmlFor people to easily find
             </label>
           </div>
@@ -213,7 +213,7 @@ export default function CreateLink() {
         <div className="mb-3 d-flex justify-content-end">
           <button
             type="button"
-            class="btn btn-primary px-5"
+            className="btn btn-primary px-5 d-flex justify-content-center"
             onClick={() => handleAdd()}
           >
             {loadingAPI && <LoadingOutlined className="me-2" />}
