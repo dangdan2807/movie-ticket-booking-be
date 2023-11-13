@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { LoadingOutlined } from '@ant-design/icons';
 
-import { UserContext } from '../../../../context/userContext';
+import { UserContext } from '../../../context/userContext';
 import {
   updateProfile,
   getProfileUser,
   changePassword,
-} from './../../../../services/UserService';
-import { handleError } from '../../../../lib/common';
+} from './../../../services/UserService';
+import { handleError } from '../../../lib/common';
 
-export default function SettingsDashboard() {
+export default function Settings() {
   const { user } = useContext(UserContext);
 
   const [fullName, setFullName] = useState(user.name);

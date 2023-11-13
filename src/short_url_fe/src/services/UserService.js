@@ -69,13 +69,14 @@ export const getProfileAdmin = () => {
   });
 };
 
-export const updateProfile = (fullName, email) => {
+export const updateProfile = (fullName, email, address) => {
   const token = getTokenFromLocalStorage();
   return axios.put(
     `/v1/users/profile`,
     {
       fullName,
       email,
+      address,
     },
     {
       headers: {
