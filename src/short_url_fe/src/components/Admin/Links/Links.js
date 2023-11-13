@@ -3,30 +3,30 @@ import ReactPaginate from 'react-paginate';
 import { SearchOutlined, CheckOutlined, EditOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
-import './Users.scss';
+import './Links.scss';
 import {
-  getUsers,
-  updateUser,
-  getUserById,
-} from '../../../services/UserService';
+  getShortLinks,
+  getShortUrlByShortLink,
+  updateShortLink,
+} from '../../../services/ShortLinkService';
 import { handleError } from '../../../lib/common';
 import { toast } from 'react-toastify';
 import { UserContext } from '../../../context/userContext';
-import ModalUpdateUser from './ModalUpdateUser';
+import ModalUpdateLink from './ModalUpdateLink';
 
-export default function User() {
+export default function Links() {
   const [isShowModalUpdate, setIsShowModalUpdate] = useState(false);
   const [selectItemUpdate, setSelectItemUpdate] = useState(1);
 
   const currentDate = dayjs();
   const { user } = useContext(UserContext);
 
-  const [users, setUsers] = useState([]);
+  const [links, setLinks] = useState([]);
   const [startDate, setStartDate] = useState(currentDate.startOf('day'));
   const [endDate, setEndDate] = useState(
     currentDate.add(1, 'day').endOf('day'),
   );
-  const [userStatus, setUserStatus] = useState(true);
+  const [status, setStatus] = useState(true);
   const [keyword, setKeyword] = useState('');
   const [isUpdateUsers, setIsUpdateUsers] = useState(false);
 
@@ -34,67 +34,65 @@ export default function User() {
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlerChangeFilterShow = (filterShow) => {
-    setUserStatus(filterShow);
+    setStatus(filterShow);
   };
 
   const handlePageClick = async (event) => {
-    const res = await getUsers(
+    const res = await getShortLinks(
       startDate,
       endDate,
-      keyword,
-      userStatus,
+      status,
       event.selected + 1,
+      10,
+      'ASC',
+      keyword,
     );
     if (res && res.data) {
       const pagination = res.pagination;
       setTotalPages(Math.ceil(pagination.totalCount / pagination.pageSize));
       setCurrentPage(pagination.currentPage - 1);
-      setUsers(res.data);
+      setLinks(res.data);
     } else {
       handleError(res, 'Get users failed');
     }
   };
 
   const handleFetchAPI = async () => {
-    const res = await getUsers(startDate, endDate, keyword, userStatus);
+    const res = await getShortLinks(
+      startDate,
+      endDate,
+      status,
+      currentPage + 1,
+      10,
+      'ASC',
+      keyword,
+    );
     if (res && res.data) {
       const pagination = res.pagination;
       setTotalPages(Math.ceil(pagination.totalCount / pagination.pageSize));
       setCurrentPage(pagination.currentPage - 1);
-      setUsers(res.data);
+      setLinks(res.data);
     }
   };
 
-  const handleUpdate = async (userUpdate) => {
-    const resGet = await getUserById(userUpdate.id);
+  const handleUpdate = async (linkUpdate) => {
+    const resGet = await getShortUrlByShortLink('/' + linkUpdate.shortUrl);
     if (resGet && resGet.data) {
-      if (userUpdate.id === user.id) {
-        toast.error('You cannot perform this action on yourself');
+      const resUpdate = await updateShortLink(linkUpdate);
+      if (resUpdate && resUpdate.data) {
+        toast.success('Update short url successfully');
+        handleFetchAPI();
       } else {
-        const resUpdate = await updateUser(
-          resGet.data.id,
-          userUpdate.fullName,
-          userUpdate.email,
-          userUpdate.address,
-          userUpdate.status,
-          userUpdate?.roles?.map((item) => item.roleId) ??
-            resGet.data?.roles?.map((item) => item.roleId),
-        );
-        if (resUpdate && resUpdate.data) {
-          toast.success('Update user successfully');
-          handleFetchAPI();
-        } else {
-          handleError(resUpdate, 'update user failed');
-        }
+        handleError(resUpdate, 'update short url failed');
       }
     } else {
-      handleError(resGet, 'user not found');
+      handleError(resGet, 'short url not found');
     }
   };
 
   useEffect(() => {
     handleFetchAPI();
-  }, [startDate, endDate, userStatus, isUpdateUsers]);
+  }, [startDate, endDate, status, isUpdateUsers]);
 
   return (
     <>
@@ -102,7 +100,7 @@ export default function User() {
         <div className="col-12 border-bottom border-2">
           <h1 className="fw-bolder">Users</h1>
           <div className="d-flex justify-content-between align-items-end mb-3">
-            <div className="users__filter-bar__input-date">
+            <div className="links__filter-bar__input-date">
               <span className="fw-bolder">Start date</span>
               <input
                 type="date"
@@ -111,7 +109,7 @@ export default function User() {
                 onChange={(e) => setStartDate(dayjs(e.target.value))}
               />
             </div>
-            <div className="users__filter-bar__input-date ms-2">
+            <div className="links__filter-bar__input-date ms-2">
               <span className="fw-bolder">End date</span>
               <input
                 type="date"
@@ -126,12 +124,12 @@ export default function User() {
               <span className="fw-bolder">Status:</span>
               <button
                 type="button"
-                className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split bg-white text-dark users__filter-bar__btn-show mt-2"
+                className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split bg-white text-dark links__filter-bar__btn-show mt-2"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 <span className="visually me-1">
-                  {userStatus === true ? 'Active' : 'Inactive'}
+                  {status === true ? 'Active' : 'Inactive'}
                 </span>
               </button>
               <ul className="dropdown-menu">
@@ -143,7 +141,7 @@ export default function User() {
                   >
                     Active
                     <CheckOutlined
-                      className={userStatus === true ? '' : 'd-none'}
+                      className={status === true ? '' : 'd-none'}
                     />
                   </span>
                 </li>
@@ -155,7 +153,7 @@ export default function User() {
                   >
                     Inactive
                     <CheckOutlined
-                      className={userStatus === false ? '' : 'd-none'}
+                      className={status === false ? '' : 'd-none'}
                     />
                   </span>
                 </li>
@@ -175,47 +173,66 @@ export default function User() {
               <button
                 type="button"
                 className="btn btn-info d-flex justify-content-center align-items-center"
-                onClick={() => handleFetchAPI()}
+                onClick={() => {
+                  setCurrentPage(0);
+                  handleFetchAPI();
+                }}
               >
                 <SearchOutlined />
               </button>
             </div>
           </div>
         </div>
-        <table className="table">
+        <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Full name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Address</th>
-              <th scope="col">Status</th>
-              <th scope="col">Create at</th>
-              <th scope="col" className="">
-                Action
+              <th scope="col">STT</th>
+              <th scope="col">Title</th>
+              <th scope="col">Short url</th>
+              <th scope="col" className="text-truncate">
+                Long url
               </th>
+              <th scope="col">Status</th>
+              <th scope="col">Click</th>
+              <th scope="col">User id</th>
+              <th scope="col">Create at</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((item) => (
-              <tr key={item.id}>
-                <th scope="row">{item.id}</th>
-                <td>{item.fullName}</td>
-                <td>{item.email}</td>
-                <td>{item.address}</td>
+            {links.map((item, index) => (
+              <tr key={item.shortUrl}>
+                <th scope="row">{currentPage * 10 + (index + 1)}</th>
+                <td className="text-truncate">{item.title}</td>
+                <td>
+                  <a
+                    href={`${window.location.protocol}//${
+                      window.location.host
+                    }/${item?.shortUrl ? item?.shortUrl : ''}`}
+                  >
+                    {item.shortUrl}
+                  </a>
+                </td>
+                <td className="text-truncate">
+                  <a href={`${item?.longUrl ? item?.longUrl : ''}`}>
+                    {new URL(item.longUrl).hostname.replace(/^www\./, '')}
+                  </a>
+                </td>
                 <td>
                   <span
                     className={
-                      'text-white p-1 rounded-pill d-flex align-items-center justify-content-center w-75 ' +
+                      'text-white py-1 px-2 rounded-pill d-flex align-items-center justify-content-center w-75 ' +
                       (item.status === true ? 'bg-success' : 'bg-danger')
                     }
                   >
                     {item.status === true ? 'active' : 'inactive'}
                   </span>
                 </td>
+                <td>{item.clickCount}</td>
+                <td>{item.userId}</td>
                 <td>
-                  {item?.createAt
-                    ? ' ' + dayjs(item?.createAt).format('DD/MM/YYYY')
+                  {item?.createdAt
+                    ? ' ' + dayjs(item?.createdAt).format('DD/MM/YYYY')
                     : ' null'}
                 </td>
                 <td className="d-flex align-items-center">
@@ -224,7 +241,7 @@ export default function User() {
                     className="btn btn-info px-3 py-2 d-flex align-items-center justify-content-center text-white"
                     onClick={async () => {
                       setIsShowModalUpdate(true);
-                      setSelectItemUpdate(item.id);
+                      setSelectItemUpdate(item.shortUrl);
                     }}
                   >
                     <EditOutlined />
@@ -271,7 +288,7 @@ export default function User() {
           />
         </div>
       </div>
-      <ModalUpdateUser
+      <ModalUpdateLink
         show={isShowModalUpdate}
         handleClose={() => setIsShowModalUpdate(false)}
         userId={selectItemUpdate}

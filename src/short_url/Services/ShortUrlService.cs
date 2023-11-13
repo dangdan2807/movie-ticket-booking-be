@@ -259,13 +259,17 @@ namespace MovieTicketBookingBe.Services
                 }
                 return item;
             }).ToList();
-
             if (shortUrl.UserId != userId)
             {
-                if (!role.Equals(RolesContraint.ADMIN) || !role.Equals(RolesContraint.MOD))
+                switch (role)
                 {
-                    // throw message and status code 403
-                    throw new UnauthorizedAccessException("You don't have permission to update this short url");
+                    case RolesContraint.ADMIN:
+                    case RolesContraint.MOD:
+                        break;
+                    case RolesContraint.MEMBER:
+                    case RolesContraint.VIP:
+                    default:
+                        throw new UnauthorizedAccessException("You don't have permission to update this short url");
                 }
             }
 

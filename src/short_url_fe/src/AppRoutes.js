@@ -11,6 +11,7 @@ import SettingsDashboard from './components/User/Dashboard/Settings/SettingsDash
 import LoginAdmin from './components/Admin/Login/Login';
 import HomeAdmin from './components/Admin/Home/Home';
 import UsersAdmin from './components/Admin/Users/Users';
+import LinksAdmin from './components/Admin/Links/Links';
 
 import ComingSoon from './components/ComingSoon/ComingSoon';
 import RedirectPage from './components/Redirect/RedirectPage';
@@ -40,7 +41,7 @@ const AppRoutes = [
     path: '/admin/links',
     element: (
       <LayoutDashboardAdmin>
-        <ComingSoon />
+        <LinksAdmin />
       </LayoutDashboardAdmin>
     ),
   },

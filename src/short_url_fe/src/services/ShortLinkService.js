@@ -31,6 +31,7 @@ export const getShortLinks = (
   currentPage = 1,
   pageSize = 10,
   sort = 'ASC',
+  keyword = '',
 ) => {
   const token = getTokenFromLocalStorage();
   return axios.get(`/v1/short-url`, {
@@ -45,6 +46,7 @@ export const getShortLinks = (
       startDate: startDate.format('YYYY-MM-DDTHH:mm:ss'),
       endDate: endDate.format('YYYY-MM-DDTHH:mm:ss'),
       status,
+      keyword,
     },
   });
 };
@@ -98,4 +100,23 @@ export const deleteShortUrlByShortLink = (shortLink) => {
       Authorization: `Bearer ${token}`,
     },
   });
+};
+
+export const updateShortLink = (shortLink) => {
+  const token = getTokenFromLocalStorage();
+  return axios.put(
+    `/v1/short-url/short-link/${shortLink?.shortUrl}`,
+    {
+      title: shortLink.title,
+      longUrl: shortLink.longUrl,
+      shortUrl: shortLink?.shortUrl,
+      status: shortLink.status,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
 };
