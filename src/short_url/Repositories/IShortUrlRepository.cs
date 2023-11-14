@@ -15,5 +15,6 @@ namespace MovieTicketBookingBe.Repositories
         Task<ShortUrl> CreateShortUrl(ShortUrl shortUrl);
         Task<ShortUrl> UpdateShortUrlByShortLink(ShortUrl shortUrlObj);
         Task<ShortUrl> DeleteShortUrlByShortLink(string shortLink);
+        Task<int> TotalShortUrls();
     }
 }

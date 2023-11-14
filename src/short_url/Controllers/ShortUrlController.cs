@@ -4,10 +4,8 @@ using MovieTicketBookingBe.Models.DTO;
 using MovieTicketBookingBe.Models.Response;
 using MovieTicketBookingBe.Services;
 using MovieTicketBookingBe.ViewModels;
-using Newtonsoft.Json;
 using System.Net;
 using System.Security.Claims;
-using System.Text.Json.Nodes;
 
 namespace MovieTicketBookingBe.Controllers
 {

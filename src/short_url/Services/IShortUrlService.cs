@@ -14,5 +14,6 @@ namespace MovieTicketBookingBe.Services
         Task<ShortUrlDTO> GetShortUrlByHashIdAndUserId(string hashId, int userId, List<string> roles);
         Task<ShortUrlDTO> GetShortUrlByShortLink(string shortLink);
         Task<ShortUrlDTO> DeleteShortUrlByShortLink(string shortLink, int userId, List<string> roles);
+        Task<int> TotalShortUrls();
     }
 }

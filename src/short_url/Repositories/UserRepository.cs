@@ -336,5 +336,10 @@ namespace MovieTicketBookingBe.Repositories
             await _context.SaveChangesAsync();
             return user;
         }
+
+        public async Task<int> TotalUsers()
+        {
+           return await _context.Users.CountAsync();
+        }
     }
 }

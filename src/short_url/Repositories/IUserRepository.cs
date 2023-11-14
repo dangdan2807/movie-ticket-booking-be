@@ -13,5 +13,6 @@ namespace MovieTicketBookingBe.Repositories
         Task<UserDTO> UpdateUserById(int id, UpdateUserVM updateUserVM);
         Task<User?> UpdateProfile(int userId, UpdateProfileVM updateProfileVM);
         Task<User?> UpdatePassword(int userId, UpdatePasswordVM updatePasswordVM);
+        Task<int> TotalUsers();
     }
 }

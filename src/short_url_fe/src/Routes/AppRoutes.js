@@ -23,49 +23,110 @@ import AdminRoutes from './AdminRoutes';
 const AppRoutes = () => {
   return (
     <>
-      <UserRoutes path="/dashboard">
-        <HomeDashboard />
-      </UserRoutes>
-      <UserRoutes path="/links">
-        <LinksDashboard />
-      </UserRoutes>
-      <UserRoutes path="/links/create">
-        <CreateLink />
-      </UserRoutes>
-      <UserRoutes path="/link-in-bio">
-        <ComingSoon />
-      </UserRoutes>
-      <UserRoutes path="/qr-codes">
-        <ComingSoon />
-      </UserRoutes>
-      <UserRoutes path="/settings">
-        <SettingsDashboard />
-      </UserRoutes>
-
-      <AdminRoutes path="/admin">
-        <HomeAdmin />
-      </AdminRoutes>
-      <AdminRoutes path="/admin/users">
-        <UsersAdmin />
-      </AdminRoutes>
-      <AdminRoutes path="/admin/links">
-        <LinksAdmin />
-      </AdminRoutes>
-      <AdminRoutes path="/admin/qr-codes">
-        <ComingSoon />
-      </AdminRoutes>
-      <AdminRoutes path="/admin/link-in-bio">
-        <ComingSoon />
-      </AdminRoutes>
-      <AdminRoutes path="/admin/settings">
-        <SettingsAdmin />
-      </AdminRoutes>
-
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ComingSoon />} />
         <Route path="/admin/login" element={<AdminLogin />} />
+        
+        <Route
+          path="/dashboard"
+          element={
+            <UserRoutes>
+              <HomeDashboard />
+            </UserRoutes>
+          }
+        />
+        <Route
+          path="/links"
+          element={
+            <UserRoutes>
+              <LinksDashboard />
+            </UserRoutes>
+          }
+        />
+        <Route
+          path="/links/create"
+          element={
+            <UserRoutes>
+              <CreateLink />
+            </UserRoutes>
+          }
+        />
+        <Route
+          path="/link-in-bio"
+          element={
+            <UserRoutes>
+              <ComingSoon />
+            </UserRoutes>
+          }
+        />
+        <Route
+          path="/qr-codes"
+          element={
+            <UserRoutes>
+              <ComingSoon />
+            </UserRoutes>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <UserRoutes>
+              <SettingsDashboard />
+            </UserRoutes>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <AdminRoutes>
+              <HomeAdmin />
+            </AdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <AdminRoutes>
+              <UsersAdmin />
+            </AdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/links"
+          element={
+            <AdminRoutes>
+              <LinksAdmin />
+            </AdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/qr-codes"
+          element={
+            <AdminRoutes>
+              <ComingSoon />
+            </AdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/link-in-bio"
+          element={
+            <AdminRoutes>
+              <ComingSoon />
+            </AdminRoutes>
+          }
+        />
+        <Route
+          path="/admin/settings"
+          element={
+            <AdminRoutes>
+              <SettingsAdmin />
+            </AdminRoutes>
+          }
+        />
+
         <Route path="/" element={<Home />} />
         <Route path="/:slug" element={<RedirectPage />} />
       </Routes>

@@ -370,6 +370,11 @@ namespace MovieTicketBookingBe.Repositories
             }
         }
 
+        public async Task<int> TotalShortUrls()
+        {
+            return await _context.ShortUrls.Where(s => s.IsDeleted == false).CountAsync();
+        }
+
         public async Task<ShortUrl> UpdateShortUrlByShortLink(ShortUrl shortUrl)
         {
             if (shortUrl == null)

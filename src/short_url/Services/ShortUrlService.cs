@@ -421,5 +421,10 @@ namespace MovieTicketBookingBe.Services
 
             return await _shortUrlRepository.CountShortUrlsByUserId(userId);
         }
+
+        public async Task<int> TotalShortUrls()
+        {
+            return await _shortUrlRepository.TotalShortUrls();
+        }
     }
 }

@@ -10,6 +10,7 @@ using MovieTicketBookingBe.Services;
 using Serilog;
 using Serilog.Exceptions;
 using ShortUrlBachEnd.Redis;
+using ShortUrlBachEnd.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -83,6 +84,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
 builder.Services.AddScoped<IShortUrlService, ShortUrlService>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

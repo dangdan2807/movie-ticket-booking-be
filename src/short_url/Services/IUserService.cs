@@ -14,5 +14,6 @@ namespace MovieTicketBookingBe.Services
         Task<UserDTO> UpdateUserById(int id, int userIdUpdate, UpdateUserVM updateUserVM);
         Task<UserDTO> UpdateProfile(int userId, UpdateProfileVM updateProfileVM);
         Task<UserDTO> UpdatePassword(int userId, UpdatePasswordVM updatePasswordVM);
+        Task<int> TotalUsers();
     }
 }

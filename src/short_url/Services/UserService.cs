@@ -277,5 +277,10 @@ namespace MovieTicketBookingBe.Services
                 createAt = user.CreateAt,
             };
         }
+
+        public async Task<int> TotalUsers()
+        {
+            return await _userRepository.TotalUsers();
+        }
     }
 }

@@ -44,10 +44,7 @@ export function Header() {
         ? await getProfileAdmin()
         : await getProfileUser();
       if (res && res.data) {
-        const currentPathname = window.location.pathname;
-        const isAdmin =
-          res.data.roles[0].roleId === 1 &&
-          res.data.roles[0].roleCode === 'ADMIN';
+        const isAdmin = res.data.roles[0].roleCode === 'ADMIN';
         if (isAdmin) {
           loginContext(res.data.id, res.data.fullName, res.data.email, true);
           if (!currentPathname.includes('/admin')) {
