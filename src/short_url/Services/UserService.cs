@@ -72,6 +72,7 @@ namespace MovieTicketBookingBe.Services
                 description = r.Description,
                 status = r.Status,
                 createAt = r.CreateAt,
+                priority = r.Priority
             }).ToList();
 
 

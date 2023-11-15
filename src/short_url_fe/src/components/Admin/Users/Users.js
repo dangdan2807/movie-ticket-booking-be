@@ -16,7 +16,7 @@ import ModalUpdateUser from './ModalUpdateUser';
 
 export default function User() {
   const [isShowModalUpdate, setIsShowModalUpdate] = useState(false);
-  const [selectItemUpdate, setSelectItemUpdate] = useState(1);
+  const [selectItemIdUpdate, setSelectItemIdUpdate] = useState(1);
 
   const currentDate = dayjs();
   const { user } = useContext(UserContext);
@@ -224,7 +224,7 @@ export default function User() {
                     className="btn btn-info px-3 py-2 d-flex align-items-center justify-content-center text-white"
                     onClick={async () => {
                       setIsShowModalUpdate(true);
-                      setSelectItemUpdate(item.id);
+                      setSelectItemIdUpdate(item.id);
                     }}
                   >
                     <EditOutlined />
@@ -274,7 +274,7 @@ export default function User() {
       <ModalUpdateUser
         show={isShowModalUpdate}
         handleClose={() => setIsShowModalUpdate(false)}
-        userId={selectItemUpdate}
+        userId={selectItemIdUpdate}
         reloadShortUrls={() => setIsUpdateUsers(!isUpdateUsers)}
       />
     </>

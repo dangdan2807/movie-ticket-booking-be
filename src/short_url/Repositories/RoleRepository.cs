@@ -78,7 +78,7 @@ namespace MovieTicketBookingBe.Repositories
 
                 int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
                 int limit = paginationVM.pageSize;
-                string queryString = @"SELECT * FROM roles WHERE (role_code LIKE @keyword OR role_name LIKE @keyword) and status = @status ORDER BY Create_At " +
+                string queryString = @"SELECT * FROM roles WHERE (role_code LIKE @keyword OR role_name LIKE @keyword) and is_deleted = 0 and status = @status ORDER BY Create_At " +
                     paginationVM.sort + " LIMIT @skip, @limit";
                 MySqlCommand command = new MySqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
@@ -98,7 +98,8 @@ namespace MovieTicketBookingBe.Repositories
                             RoleId = reader.GetInt32("role_id"),
                             RoleName = reader.GetString("role_name"),
                             RoleCode = reader.GetString("role_code"),
-                            Description = reader.GetString("description"),
+                            Description = string.IsNullOrEmpty(reader.GetString("description")) ? "" : reader.GetString("description"),
+                            Priority = reader.GetInt32("priority"),
                             Status = reader.GetBoolean("status"),
                             CreateAt = reader.GetDateTime("create_at"),
                             CreateBy = reader.GetInt32("create_by"),
@@ -120,6 +121,8 @@ namespace MovieTicketBookingBe.Repositories
                 roleId = x.RoleId,
                 roleName = x.RoleName,
                 roleCode = x.RoleCode,
+                description = x.Description,
+                priority = x.Priority,
                 status = x.Status,
                 createAt = x.CreateAt,
             }).ToList();

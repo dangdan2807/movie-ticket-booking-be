@@ -165,3 +165,13 @@ export const getUserById = (id) => {
     },
   });
 };
+
+export const getRoles = () => {
+  const token = getTokenFromLocalStorage();
+  return axios.get(`/v1/roles`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
