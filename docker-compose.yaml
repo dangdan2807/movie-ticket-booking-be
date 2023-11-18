@@ -48,7 +48,7 @@ services:
       - ConnectionStrings__Redis=redis:6379
       - ConnectionStrings__RedisPassword=
       - ConnectionStrings__Seq=http://seq:5341
-      - Serilog__WriteTo[1]__Args__serverUrl=http://seq:5341
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
 
   frontend:
     container_name: short-link-fe-nginx
