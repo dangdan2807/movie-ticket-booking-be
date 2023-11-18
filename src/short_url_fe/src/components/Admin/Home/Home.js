@@ -17,9 +17,9 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       const res = await statisticsBase();
-      if (res && res) {
-        setTotalUsers(res.data.totalUsers ?? 0);
-        setTotalShortUrls(res.data.totalShortUrls ?? 0);
+      if (res && res.data) {
+        setTotalUsers(res.data?.totalUsers ?? 0);
+        setTotalShortUrls(res.data?.totalShortUrls ?? 0);
       } else {
         handleError(res, 'Error fetching data');
       }

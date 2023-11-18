@@ -44,14 +44,23 @@ export function Header() {
         ? await getProfileAdmin()
         : await getProfileUser();
       if (res && res.data) {
-        const isAdmin = res.data.roles[0].roleCode === 'ADMIN';
+        const { id, fullName, email, roles } = res.data;
+        let isAdmin = false;
+        switch (roles[0].roleCode) {
+          case 'ADMIN':
+          case 'MOD':
+            isAdmin = true;
+            break;
+          default:
+            isAdmin = false;
+            break;
+        }
+        loginContext(id, fullName, email, isAdmin);
         if (isAdmin) {
-          loginContext(res.data.id, res.data.fullName, res.data.email, true);
           if (!currentPathname.includes('/admin')) {
             navigate('/admin');
           }
         } else {
-          loginContext(res.data.id, res.data.fullName, res.data.email, false);
           if (currentPathname.includes('/admin')) {
             navigate('/dashboard');
           }

@@ -32,7 +32,7 @@ builder.Host.UseSerilog((context, loggerConfig)
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(settings["DefaultConnection"], new MySqlServerVersion(new Version(8, 0, 26)))
+    options.UseMySql(settings["DefaultConnection"], new MySqlServerVersion(new Version(8, 0, 23)))
 );
 
 builder.Services.AddStackExchangeRedisCache(options =>

@@ -141,7 +141,6 @@ namespace MovieTicketBookingBe.Services
             {
                 throw new Exception("Wrong email or password");
             }
-
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginViewModel.password, user.Password);
             if (!isPasswordValid)
             {

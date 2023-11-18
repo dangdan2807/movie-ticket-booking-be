@@ -105,7 +105,7 @@ namespace MovieTicketBookingBe.Repositories
 
                 int skip = (paginationVM.currentPage - 1) * paginationVM.pageSize;
                 int limit = paginationVM.pageSize;
-                string queryString = @"SELECT * FROM Users WHERE (full_name LIKE @keyword OR Email LIKE @keyword) " +
+                string queryString = @"SELECT * FROM users WHERE (full_name LIKE @keyword OR email LIKE @keyword) " +
                     "and Create_At between @startDate and @endDate and status = @status ORDER BY Create_At " +
                     paginationVM.sort + " LIMIT @skip, @limit";
                 MySqlCommand command = new MySqlCommand(queryString, connection);

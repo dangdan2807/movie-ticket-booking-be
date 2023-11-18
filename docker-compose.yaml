@@ -2,7 +2,7 @@ version: '3.8'
 services:
   mysql:
     container_name: mysql-1
-    image: mysql:latest
+    image: mysql:8.0
     ports:
       - '13306:3306'
     environment:
@@ -36,7 +36,7 @@ services:
 
   backend:
     container_name: short-link-be
-    image: dangdan2807/short-url-be:v1.1.1
+    image: dangdan2807/short-url-be
     ports:
       - '5192:80'
       - '7167:443'
@@ -44,15 +44,20 @@ services:
       - mysql
       - seq
     environment:
-      - ConnectionStrings__DefaultConnection="Server=mysql;Port=3306;Database=short_urls;User=admin;Password=123456"
+      - ConnectionStrings__DefaultConnection=server=mysql-1;port=3306;database=short_urls;user=admin;password=123456;
       - ConnectionStrings__Redis=redis:6379
+      - ConnectionStrings__RedisPassword=
       - ConnectionStrings__Seq=http://seq:5341
-      - WriteTo[1]__Args__serverUrl=http://seq:5341
+      - Serilog__WriteTo[1]__Args__serverUrl=http://seq:5341
 
   frontend:
     container_name: short-link-fe-nginx
-    image: dangdan2807/short-url-fe:v1.0
+    image: dangdan2807/short-url-fe
     ports:
       - '44481:80'
     environment:
-      - REACT_APP_URL_BACKEND=http://localhost:5192/api
+      - REACT_APP_URL_BACKEND=http://short-link-be:80/api
+
+
+# // "Redis": "redis-15338.c252.ap-southeast-1-1.ec2.cloud.redislabs.com:15338",
+#     // "RedisPassword": "YJTNO4B9ArbcXQ4MQ1nvSMaOzjWznjop",

@@ -77,14 +77,22 @@ export default function Login() {
       storeTokenInLocalStorage(res.data.accessToken);
       let resProfile = await getProfileUser();
       if (resProfile && resProfile.data) {
-        const isAdmin =
-          resProfile.data.roles[0].roleId === 1 &&
-          resProfile.data.roles[0].roleCode === 'ADMIN';
+        let isAdmin = false;
+        switch (resProfile.data.roles[0].roleCode) {
+          case 'ADMIN':
+          case 'MOD':
+            isAdmin = true;
+            break;
+          default:
+            isAdmin = false;
+            break;
+        }
         if (isAdmin === true) {
           toast.error('user not found');
           logout();
         } else {
-          loginContext(resProfile.data.id, resProfile.data.fullName, resProfile.data.email, isAdmin);
+          const { id, fullName, email } = resProfile.data;
+          loginContext(id, fullName, email, isAdmin);
           navigate('/');
         }
       } else {

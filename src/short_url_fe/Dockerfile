@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Cài đặt các gói phụ thuộc và xây dựng ứng dụng
-RUN npm install
+RUN npm install --force
 
 RUN npm run build
 
